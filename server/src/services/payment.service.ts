@@ -45,10 +45,22 @@ export const createPaymentSession = async (bookingId: string | number) => {
   return { checkoutUrl: session.url, sessionId: session.id };
 };
 
-export const handleStripeWebhook = async (event: any) => {
+export const handleStripeWebhook = async (body: Buffer, sig: string) => {
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
+  if (!webhookSecret) {
+    throw new Error('Chưa cấu hình Stripe Webhook Secret trong file .env!');
+  }
+
+  let event: any;
+  try {
+    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
+  } catch (err: any) {
+    throw new Error(`Webhook signature verification failed: ${err.message}`);
+  }
+
   // Chỉ xử lý khi khách hàng đã thanh toán thành công
   if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
+    const session = event.data.object as any;
     const bookingId = session.metadata?.bookingId;
 
     if (bookingId) {

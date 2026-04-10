@@ -54,3 +54,16 @@ export const getUserBookings = async (userId: string | number) => {
     orderBy: { createdAt: 'desc' }
   });
 };
+
+export const cancelBooking = async (userId: string | number, bookingId: string | number) => {
+  const booking = await prisma.booking.findUnique({ where: { id: Number(bookingId) } });
+
+  if (!booking) throw new Error('Không tìm thấy đơn đặt phòng!');
+  if (booking.userId !== Number(userId)) throw new Error('Bạn không có quyền hủy đơn này!');
+  if (booking.status !== 'PENDING') throw new Error('Chỉ có thể hủy đơn đang chờ thanh toán!');
+
+  return await prisma.booking.update({
+    where: { id: Number(bookingId) },
+    data: { status: 'CANCELLED' }
+  });
+};

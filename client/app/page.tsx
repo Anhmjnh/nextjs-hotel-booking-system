@@ -2,27 +2,18 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import RoomCard, { Room } from "../components/RoomCard";
 import api from "../api";
+import Header from "./header/page";
+import Footer from "./footer/page";
 
 export default function HomePage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loadingRooms, setLoadingRooms] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    // Bọc trong setTimeout để trở thành tác vụ bất đồng bộ
-    // Giúp tránh lỗi cascading renders (gọi setState đồng bộ trong useEffect)
-    const timer = setTimeout(() => {
-      const token = Cookies.get("token");
-      if (token) {
-        setIsLoggedIn(true);
-      }
-    }, 0);
-    
     // Hàm gọi API lấy danh sách phòng
     const fetchRooms = async () => {
       try {
@@ -38,66 +29,35 @@ export default function HomePage() {
     };
 
     fetchRooms();
-    return () => clearTimeout(timer);
   }, []);
-
-  const handleLogout = () => {
-    Cookies.remove("token"); // Xóa token
-    setIsLoggedIn(false); // Cập nhật lại trạng thái
-    router.refresh();
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* --- THANH ĐIỀU HƯỚNG (NAVBAR) --- */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <div className="text-2xl font-extrabold text-blue-600 tracking-tight">
-            <Link href="/">BookingHotel</Link>
-          </div>
-          <div className="space-x-4 flex items-center">
-            {isLoggedIn ? (
-              <>
-                <span className="text-gray-700 font-medium hidden sm:inline">Xin chào!</span>
-                <button onClick={handleLogout} className="bg-red-50 text-red-600 px-5 py-2.5 rounded-lg font-medium hover:bg-red-100 transition shadow-sm">
-                  Đăng xuất
-                </button>
-              </>
-            ) : (
-              <>
-                <Link href="/login" className="text-gray-600 hover:text-blue-600 font-medium transition">
-                  Đăng nhập
-                </Link>
-                <Link href="/register" className="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition shadow-md">
-                  Đăng ký
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </header>
+      {/* Gọi Component Header vào đây */}
+      <Header />
 
       {/* --- PHẦN BANNER CHÍNH (HERO SECTION) --- */}
-      <section className="relative bg-blue-700 text-white py-28 px-4 sm:px-6 lg:px-8 text-center overflow-hidden">
-        {/* Ảnh nền có lớp phủ mờ */}
-        <div className="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center"></div>
+      <section className="relative bg-gray-900 text-white py-32 px-8 text-center flex flex-col items-center justify-center">
+        {/* Ảnh nền tối giản, sang trọng */}
+        <div className="absolute inset-0 opacity-40 bg-[url('https://images.unsplash.com/photo-1542314831-c6a4d1409362?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900/90"></div>
         
-        <div className="relative max-w-4xl mx-auto">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 drop-shadow-lg">
-            Tìm Khách Sạn Hoàn Hảo Của Bạn
+        <div className="relative max-w-5xl mx-auto w-full z-10">
+          <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight drop-shadow-lg leading-tight">
+            Kỳ nghỉ trong mơ <br/><span className="text-blue-500">bắt đầu từ đây.</span>
           </h1>
-          <p className="text-lg sm:text-xl mb-10 text-blue-100 max-w-2xl mx-auto">
-            Hơn 10,000+ phòng khách sạn cao cấp đang chờ đón bạn với mức giá ưu đãi nhất. Đặt phòng ngay hôm nay!
+          <p className="text-xl mb-12 text-gray-200 max-w-2xl mx-auto font-medium">
+            Khám phá hàng ngàn không gian lưu trú sang trọng với mức giá tốt nhất cùng trải nghiệm đặt phòng mượt mà.
           </p>
           
-          {/* Thanh tìm kiếm mô phỏng */}
-          <div className="bg-white p-2 rounded-2xl shadow-2xl flex flex-col sm:flex-row items-center justify-between mx-auto space-y-2 sm:space-y-0 text-gray-800">
-            <input type="text" placeholder="Bạn muốn đi đâu?" className="w-full sm:w-1/3 px-6 py-3.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-100 transition" />
-            <div className="hidden sm:block w-px h-10 bg-gray-200"></div>
-            <input type="date" className="w-full sm:w-1/4 px-6 py-3.5 rounded-xl outline-none text-gray-500 hover:bg-gray-50 transition cursor-pointer" />
-            <div className="hidden sm:block w-px h-10 bg-gray-200"></div>
-            <button className="w-full sm:w-auto bg-blue-600 text-white px-10 py-3.5 rounded-xl font-bold hover:bg-blue-700 transition shadow-md">
-              Tìm kiếm
+          {/* Thanh tìm kiếm Floating Island */}
+          <div className="bg-white p-3 rounded-[2rem] shadow-2xl flex items-center w-full max-w-4xl mx-auto text-gray-800 backdrop-blur-xl">
+            <input type="text" placeholder="Bạn muốn đi đâu?" className="flex-1 px-6 py-4 rounded-l-full outline-none font-medium placeholder-gray-400 focus:bg-gray-50 transition" />
+            <div className="w-px h-12 bg-gray-200 mx-2"></div>
+            <input type="date" className="w-48 px-4 py-4 outline-none font-medium text-gray-600 cursor-pointer focus:bg-gray-50 transition" />
+            <div className="w-px h-12 bg-gray-200 mx-2"></div>
+            <button className="bg-blue-600 text-white px-10 py-4 rounded-full font-bold hover:bg-blue-700 transition duration-300 shadow-md whitespace-nowrap">
+              Tìm phòng ngay
             </button>
           </div>
         </div>
@@ -127,6 +87,9 @@ export default function HomePage() {
           </div>
         )}
       </section>
+
+      {/* Gọi Component Footer vào đây */}
+      <Footer />
     </div>
   );
 }
