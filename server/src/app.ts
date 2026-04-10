@@ -3,8 +3,6 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import routes from './routes';
 import { errorHandler } from './middlewares/errorHandler';
-import roomRoutes from './routes/room.routes';
-
 
 const app: Application = express();
 
@@ -16,8 +14,6 @@ app.use('/api/v1/payments/webhook', express.raw({ type: 'application/json' }));
 
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
-
-app.use('/api/v1/rooms', roomRoutes);
 
 
 // Test route cơ bản
