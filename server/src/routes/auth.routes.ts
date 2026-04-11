@@ -10,5 +10,7 @@ router.post('/login', authController.login);
 
 // Đường dẫn cần bảo vệ (Phải có Token mới vào được)
 router.get('/me', verifyToken, authController.getMe);
+router.put('/me', verifyToken, authController.updateMe);
+router.put('/change-password', verifyToken, authController.changePassword);
 
 export default router;

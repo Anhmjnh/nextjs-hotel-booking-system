@@ -44,6 +44,7 @@ model User {
   password  String
   name      String
   phone     String?
+  avatar    String?   // Trường lưu link ảnh đại diện
   role      Role      @default(USER)
   
   bookings  Booking[] // Relationship: 1 User có nhiều Booking (Quản lý booking cá nhân)

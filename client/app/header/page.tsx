@@ -53,7 +53,7 @@ export default function Header() {
   const handleLogout = () => {
     Cookies.remove("token");
     setIsLoggedIn(false);
-    router.push("/login");
+    window.location.href = "/";
   };
 
   return (

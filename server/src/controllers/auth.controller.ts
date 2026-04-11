@@ -45,3 +45,23 @@ export const getMe = async (req: AuthRequest, res: Response, next: NextFunction)
     next(error);
   }
 };
+
+export const updateMe = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.user.userId;
+    const updatedUser = await authService.updateProfile(userId, req.body);
+    sendSuccess(res, updatedUser, 'Cập nhật thông tin thành công!');
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const changePassword = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.user.userId;
+    await authService.changePassword(userId, req.body);
+    sendSuccess(res, null, 'Đổi mật khẩu thành công!');
+  } catch (error: any) {
+    next(error);
+  }
+};

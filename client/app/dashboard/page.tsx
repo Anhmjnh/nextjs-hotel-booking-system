@@ -25,6 +25,10 @@ export default function UserDashboard() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  // State dành cho Phân trang
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Hiển thị 5 đơn đặt phòng trên mỗi trang
+
   useEffect(() => {
     const token = Cookies.get("token");
     if (!token) {
@@ -86,6 +90,18 @@ export default function UserDashboard() {
     }
   };
 
+  // Logic Phân trang
+  const totalPages = Math.ceil(bookings.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentBookings = bookings.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Hàm chuyển trang
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   if (loading)
     return (
       <div className="min-h-screen flex justify-center items-center bg-[#f8fafc]">
@@ -96,18 +112,18 @@ export default function UserDashboard() {
   return (
     <div className="min-h-screen bg-[#f8fafc] py-16 px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-end mb-10">
-          <div>
-            <Link
-              href="/"
-              className="text-gray-500 hover:text-blue-600 font-semibold mb-4 inline-block transition"
-            >
-              &larr; Trở về Trang chủ
-            </Link>
-            <h1 className="text-4xl font-black text-gray-900 tracking-tight">
-              Lịch sử chuyến đi
+        <div className="mb-10">
+          <Link
+            href="/profile"
+            className="text-gray-500 hover:text-blue-600 font-semibold mb-4 inline-block transition"
+          >
+            &larr; Quay lại Hồ sơ
+          </Link>
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight mb-6">
+              Lịch sử <span className="text-blue-600">chuyến đi</span>
             </h1>
-            <p className="text-gray-500 mt-2 font-medium">
+            <p className="text-lg text-gray-500 font-medium">
               Quản lý và theo dõi các phòng bạn đã đặt.
             </p>
           </div>
@@ -145,7 +161,7 @@ export default function UserDashboard() {
                   </td>
                 </tr>
               ) : (
-                bookings.map((b) => (
+                currentBookings.map((b) => (
                   <tr
                     key={b.id}
                     className="hover:bg-blue-50/50 transition duration-200"
@@ -194,6 +210,33 @@ export default function UserDashboard() {
               )}
             </tbody>
           </table>
+
+          {/* Nút Điều hướng Phân trang */}
+          {totalPages > 1 && (
+            <div className="px-8 py-6 border-t border-gray-100 bg-gray-50 flex justify-center items-center gap-2 sm:gap-3">
+              <button
+                onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 rounded-xl font-bold text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-sm"
+              >
+                &larr; Trước
+              </button>
+
+              {[...Array(totalPages)].map((_, index) => (
+                <button key={index} onClick={() => handlePageChange(index + 1)} className={`w-10 h-10 rounded-xl font-bold transition flex items-center justify-center shadow-sm ${currentPage === index + 1 ? "bg-blue-600 text-white border-transparent" : "text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 hover:text-blue-600"}`}>
+                  {index + 1}
+                </button>
+              ))}
+
+              <button
+                onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 rounded-xl font-bold text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-sm"
+              >
+                Sau &rarr;
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

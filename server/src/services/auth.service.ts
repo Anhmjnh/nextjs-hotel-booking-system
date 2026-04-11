@@ -65,3 +65,30 @@ export const getUserById = async (userId: string | number) => {
   const { password: _, ...userWithoutPassword } = user;
   return userWithoutPassword;
 };
+
+export const updateProfile = async (userId: string | number, data: { name?: string; phone?: string; avatar?: string }) => {
+  const updatedUser = await prisma.user.update({
+    where: { id: Number(userId) },
+    data: { name: data.name, phone: data.phone, avatar: data.avatar },
+  });
+  const { password: _, ...userWithoutPassword } = updatedUser;
+  return userWithoutPassword;
+};
+
+export const changePassword = async (userId: string | number, data: any) => {
+  const { oldPassword, newPassword } = data;
+  const user = await prisma.user.findUnique({ where: { id: Number(userId) } });
+  if (!user) throw new Error("Không tìm thấy người dùng!");
+
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) throw new Error("Mật khẩu hiện tại không chính xác!");
+
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+  await prisma.user.update({
+    where: { id: Number(userId) },
+    data: { password: hashedPassword },
+  });
+  return true;
+};

@@ -25,16 +25,19 @@ export default function LoginPage() {
       // Gọi API đăng nhập sang Backend
       const response = await api.post("/auth/login", formData);
       
-      const { token } = response.data.data;
-
-      // Lưu token vào Cookie (sống 7 ngày)
-      Cookies.set("token", token, { expires: 7 });
+      const { token, user } = response.data.data;
 
       toast.success("Đăng nhập thành công!");
       
-      // Chuyển hướng về trang chủ
-      router.push("/");
-      router.refresh();
+      // Chuyển hướng tùy theo Role (Quyền hạn)
+      setTimeout(() => {
+        Cookies.set("token", token); // Lưu chung 1 key "token" cho cả Admin và User
+        if (user.role === "ADMIN") {
+          window.location.href = "/admin";
+        } else {
+          window.location.href = "/";
+        }
+      }, 500); // Chờ 0.5s để người dùng kịp nhìn thấy thông báo thành công
     } catch (error) {
       const errorMessage = axios.isAxiosError(error) 
         ? error.response?.data?.message || "Đăng nhập thất bại!" 
