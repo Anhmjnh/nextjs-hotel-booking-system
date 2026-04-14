@@ -11,7 +11,7 @@ const BrandLogo = () => (
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
         </div>
         <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
-            LuxStay
+        Booking
         </span>
     </div>
 );
@@ -21,12 +21,16 @@ const DashboardIcon = () => <svg className="w-5 h-5" viewBox="0 0 24 24" fill="c
 const RoomIcon = () => <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.14 8.71a2.01 2.01 0 0 0-1.85-.71H14V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v15H3v2h18v-2h-1v-5l.14-7.29zM12 21H6v-6h6v6zm0-8H6v-2h6v2zm0-4H6V6h6v3zm6 12h-4v-4h2v-2h-2v-4h4v10z"/></svg>;
 const BookingIcon = () => <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-2V2h-2v2H9V2H7v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM5 8V6h14v2H5zm2 5h4v4H7v-4z"/></svg>;
 const UserIcon = () => <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>;
+const OfferIcon = () => <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M21 9h-6.2a4.49 4.49 0 0 0 .37-1.12C15.42 6.55 14.39 5 13 5c-.9 0-1.63.48-2 1.25C10.63 5.48 9.9 5 9 5 7.61 5 6.58 6.55 6.83 7.88c.1.37.23.75.37 1.12H1v4h20V9zm-2 2v10H3V11h16zm-7-4c0-.55.45-1 1-1s1 .45 1 1c0 1.6-1.64 2.54-3.14 2.81A4.27 4.27 0 0 0 12 7zm-4 0c0-.55.45-1 1-1s1 .45 1 1a4.27 4.27 0 0 0 2.14 2.81C9.64 9.54 8 8.6 8 7z"/></svg>;
+const ContactIcon = () => <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>;
 
 const navLinks = [
     { name: "Tổng quan", href: "/admin", icon: <DashboardIcon /> },
     { name: "Quản lý Phòng", href: "/admin/rooms", icon: <RoomIcon /> },
     { name: "Quản lý Đặt phòng", href: "/admin/bookings", icon: <BookingIcon /> },
     { name: "Quản lý Người dùng", href: "/admin/users", icon: <UserIcon /> },
+    { name: "Quản lý Ưu đãi", href: "/admin/offers", icon: <OfferIcon /> },
+    { name: "Quản lý Liên hệ", href: "/admin/contact", icon: <ContactIcon /> },
 ];
 
 export default function AdminSidebar() {
@@ -34,8 +38,8 @@ export default function AdminSidebar() {
     const router = useRouter();
 
     const handleLogout = () => {
-        Cookies.remove("token");
-        window.location.href = "/";
+        Cookies.remove("admin_token");
+        window.location.href = "/login";
     };
 
     return (

@@ -14,7 +14,7 @@ const BrandLogo = () => (
       </svg>
     </div>
     <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
-      LuxStay
+      Booking
     </span>
   </div>
 );

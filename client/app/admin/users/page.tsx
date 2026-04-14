@@ -33,7 +33,7 @@ export default function AdminUsersPage() {
 
   useEffect(() => {
     // Giải mã nhanh token để lấy ID của chính Admin đang thao tác
-    const token = Cookies.get("token");
+    const token = Cookies.get("admin_token");
     if (token) {
       try {
         const payloadBase64 = token.split(".")[1];
@@ -51,7 +51,7 @@ export default function AdminUsersPage() {
 
   const fetchUsers = async () => {
     try {
-      const token = Cookies.get("token");
+      const token = Cookies.get("admin_token");
       const response = await api.get("/admin/users", {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -67,7 +67,7 @@ export default function AdminUsersPage() {
 
   const handleUpdateRole = async (id: number, newRole: string) => {
     try {
-      const token = Cookies.get("token");
+      const token = Cookies.get("admin_token");
       await api.put(`/admin/users/${id}/role`, { role: newRole }, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -88,7 +88,7 @@ export default function AdminUsersPage() {
     if (!window.confirm("Bạn có chắc chắn muốn xóa người dùng này? Thao tác này không thể hoàn tác!")) return;
     
     try {
-      const token = Cookies.get("token");
+      const token = Cookies.get("admin_token");
       await api.delete(`/admin/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -126,7 +126,7 @@ export default function AdminUsersPage() {
     
     setIsSaving(true);
     try {
-      const token = Cookies.get("token");
+      const token = Cookies.get("admin_token");
       await api.put(`/admin/users/${editingUser.id}`, editFormData, {
         headers: { Authorization: `Bearer ${token}` }
       });

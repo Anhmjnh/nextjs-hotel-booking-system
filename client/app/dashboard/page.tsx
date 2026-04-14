@@ -186,10 +186,17 @@ export default function UserDashboard() {
                     </td>
                     <td className="px-8 py-6 whitespace-nowrap">
                       <span
-                        className={`px-4 py-1.5 inline-flex text-xs font-bold rounded-full border ${b.status === "CONFIRMED" ? "bg-green-50 text-green-700 border-green-200" : b.status === "PENDING" ? "bg-orange-50 text-orange-700 border-orange-200" : "bg-red-50 text-red-700 border-red-200"}`}
+                        className={`px-4 py-1.5 inline-flex text-xs font-bold rounded-full border ${
+                          b.status === "CONFIRMED" ? "bg-blue-50 text-blue-700 border-blue-200" : 
+                          b.status === "COMPLETED" ? "bg-green-50 text-green-700 border-green-200" : 
+                          b.status === "PENDING" ? "bg-orange-50 text-orange-700 border-orange-200" : 
+                          "bg-red-50 text-red-700 border-red-200"
+                        }`}
                       >
                         {b.status === "CONFIRMED"
                           ? "Đã xác nhận"
+                          : b.status === "COMPLETED"
+                          ? "Đã hoàn thành"
                           : b.status === "PENDING"
                             ? "Chờ thanh toán"
                             : "Đã hủy"}

@@ -1,14 +1,20 @@
 import prisma from '../config/prisma';
 import Stripe from 'stripe';
+import { sendBookingConfirmationEmail } from '../utils/email';
 
 // Khởi tạo Stripe với Secret Key
 // @ts-ignore
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', { apiVersion: '2024-04-10' });
 
 export const createPaymentSession = async (bookingId: string | number) => {
+  const parsedId = Number(bookingId);
+  if (isNaN(parsedId)) {
+    throw new Error('ID đơn đặt phòng không hợp lệ!');
+  }
+
   // 1. Lấy thông tin đơn đặt phòng kèm theo thông tin User và Room
   const booking = await prisma.booking.findUnique({
-    where: { id: Number(bookingId) },
+    where: { id: parsedId },
     include: { room: true, user: true }
   });
 
@@ -65,9 +71,10 @@ export const handleStripeWebhook = async (body: Buffer, sig: string) => {
 
     if (bookingId) {
       // 1. Cập nhật trạng thái Booking thành CONFIRMED (Đã xác nhận)
-      await prisma.booking.update({
+      const updatedBooking = await prisma.booking.update({
         where: { id: Number(bookingId) },
-        data: { status: 'CONFIRMED' }
+        data: { status: 'CONFIRMED' },
+        include: { user: true, room: true }
       });
 
       // 2. Tạo bản ghi Payment lưu vào Database
@@ -80,6 +87,9 @@ export const handleStripeWebhook = async (body: Buffer, sig: string) => {
           paymentDate: new Date(),
         }
       });
+
+      // 3. Gửi Email xác nhận sau khi Stripe báo thanh toán hoàn tất
+      await sendBookingConfirmationEmail(updatedBooking);
     }
   }
 };

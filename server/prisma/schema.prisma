@@ -36,18 +36,25 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum PaymentMethod {
+  ONLINE
+  CASH
+}
+
 // --- MODELS ---
 
 model User {
   id        Int       @id @default(autoincrement())
   email     String    @unique
-  password  String
+  password  String?   // Bỏ bắt buộc vì Đăng nhập Google không có pass
+  googleId  String?   @unique // Lưu ID của Google
   name      String
   phone     String?
   avatar    String?   // Trường lưu link ảnh đại diện
   role      Role      @default(USER)
   
   bookings  Booking[] // Relationship: 1 User có nhiều Booking (Quản lý booking cá nhân)
+  passwordResetTokens PasswordResetToken[] // Liên kết đến các token reset mật khẩu
   
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -62,6 +69,7 @@ model Room {
   type          RoomType
   amenities     String[]  // Mảng tiện ích (Wifi, Tivi, Điều hòa...)
   images        String[]  // Mảng URL ảnh của phòng
+  location      String    @default("TP. Hồ Chí Minh") // Vị trí phòng (Thành phố/Khu vực)
   isAvailable   Boolean   @default(true) 
   
   bookings      Booking[] 
@@ -80,6 +88,14 @@ model Booking {
   totalDays      Int
   totalPrice     Float
   status         BookingStatus @default(PENDING)
+  paymentMethod  PaymentMethod @default(ONLINE) // Hình thức TT
+  appliedCode    String?       // Mã giảm giá đã áp dụng
+  discountAmount Float         @default(0)      // Số tiền được giảm
+
+  guestName      String?       // Tên người nhận phòng
+  guestPhone     String?       // Số điện thoại người nhận phòng
+  guestCount     Int           @default(1)      // Số lượng người đi
+
   specialRequest String?       @db.Text
 
   user           User          @relation(fields: [userId], references: [id])
@@ -104,13 +120,38 @@ model Payment {
   updatedAt       DateTime      @updatedAt
 }
 model Offer {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  code        String   @unique
-  validUntil  String
-  image       String
-  color       String?  // Lưu class màu sắc CSS để hiển thị đẹp hơn
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  title         String
+  code          String   @unique
+  discountType  String   // 'PERCENTAGE' (Phần trăm) hoặc 'FIXED' (Tiền mặt)
+  discountValue Float
+  minOrderValue Float?   // Tùy chọn: Giá trị đơn tối thiểu để áp dụng
+  maxDiscount   Float?   // Tùy chọn: Mức giảm tối đa (nếu chọn giảm theo %)
+  startDate     DateTime
+  endDate       DateTime
+  image         String
+  color         String?  @default("bg-blue-50 text-blue-700 border-blue-200")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Contact {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

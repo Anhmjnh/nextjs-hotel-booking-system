@@ -9,9 +9,13 @@ import api from "../../api";
 export interface Offer {
   id: number;
   title: string;
-  description: string;
   code: string;
-  validUntil: string;
+  discountType: 'PERCENTAGE' | 'FIXED';
+  discountValue: number;
+  minOrderValue: number | null;
+  maxDiscount: number | null;
+  startDate: string;
+  endDate: string;
   image: string;
   color: string;
 }
@@ -51,6 +55,18 @@ export default function OffersPage() {
 
     // Reset trạng thái nút copy sau 3 giây
     setTimeout(() => setCopiedCode(null), 3000);
+  };
+
+  // Hàm render mô tả dựa trên logic giảm giá
+  const renderOfferDescription = (offer: Offer) => {
+    let text = `Giảm ${offer.discountType === 'PERCENTAGE' ? `${offer.discountValue}%` : `${offer.discountValue.toLocaleString('vi-VN')}đ`}`;
+    if (offer.discountType === 'PERCENTAGE' && offer.maxDiscount) {
+      text += ` (tối đa ${offer.maxDiscount.toLocaleString('vi-VN')}đ)`;
+    }
+    if (offer.minOrderValue) {
+      text += ` cho đơn từ ${offer.minOrderValue.toLocaleString('vi-VN')}đ.`;
+    }
+    return text;
   };
 
   return (
@@ -138,13 +154,13 @@ export default function OffersPage() {
                       <span
                         className={`inline-block px-3 py-1 text-xs font-bold rounded-full border mb-4 ${offer.color || "bg-blue-50 text-blue-700 border-blue-200"}`}
                       >
-                        HSD: {offer.validUntil}
+                        Từ {new Date(offer.startDate).toLocaleDateString('vi-VN')} - {new Date(offer.endDate).toLocaleDateString('vi-VN')}
                       </span>
                       <h3 className="text-xl font-bold text-slate-900 mb-2 leading-snug">
                         {offer.title}
                       </h3>
                       <p className="text-sm text-slate-500 font-medium mb-6 line-clamp-3">
-                        {offer.description}
+                        {renderOfferDescription(offer)}
                       </p>
                     </div>
 

@@ -4,6 +4,8 @@ import { useState } from "react";
 import Header from "../header/page";
 import Footer from "../footer/page";
 import toast from "react-hot-toast";
+import api from "../../api";
+import axios from "axios";
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,18 +21,22 @@ export default function ContactPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Giả lập thời gian gửi API mất 1.5 giây
-    setTimeout(() => {
+    try {
+      await api.post("/contacts", formData);
       toast.success("Cảm ơn bạn! Lời nhắn của bạn đã được gửi thành công.", {
         style: { borderRadius: "10px", background: "#333", color: "#fff" },
       });
       setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch (error) {
+      const errorMessage = axios.isAxiosError(error) ? error.response?.data?.message || "Gửi tin nhắn thất bại!" : "Gửi tin nhắn thất bại!";
+      toast.error(errorMessage);
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -45,7 +51,7 @@ export default function ContactPage() {
               Liên hệ với <span className="text-blue-600">Chúng tôi</span>
             </h1>
             <p className="text-lg text-slate-500 font-medium">
-              Bạn có câu hỏi, thắc mắc hay cần hỗ trợ đặt phòng? Đừng ngần ngại để lại lời nhắn, đội ngũ hỗ trợ của LuxStay luôn sẵn sàng phục vụ bạn 24/7.
+              Bạn có câu hỏi, thắc mắc hay cần hỗ trợ đặt phòng? Đừng ngần ngại để lại lời nhắn, đội ngũ hỗ trợ của Booking luôn sẵn sàng phục vụ bạn 24/7.
             </p>
           </div>
 
@@ -80,8 +86,8 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">Email</h3>
-                  <p className="text-slate-500 font-medium text-lg">support@luxstay.com</p>
-                  <p className="text-slate-500 font-medium text-lg">booking@luxstay.com</p>
+                  <p className="text-slate-500 font-medium text-lg">support@booking.com</p>
+                  <p className="text-slate-500 font-medium text-lg">booking@support.com</p>
                 </div>
               </div>
             </div>

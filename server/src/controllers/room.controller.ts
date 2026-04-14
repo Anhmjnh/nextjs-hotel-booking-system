@@ -4,7 +4,7 @@ import { sendSuccess } from '../utils/response';
 
 export const getAllRooms = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const rooms = await roomService.getAllRooms();
+    const rooms = await roomService.getAllRooms(req.query);
     sendSuccess(res, rooms, 'Lấy danh sách phòng thành công!');
   } catch (error: any) {
     next(error);

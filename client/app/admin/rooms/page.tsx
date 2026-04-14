@@ -14,6 +14,7 @@ interface Room {
   capacity: number;
   type: string;
   images: string[];
+  location: string;
   isAvailable: boolean;
   createdAt: string;
 }
@@ -42,7 +43,7 @@ export default function AdminRoomsPage() {
 
   const fetchRooms = async () => {
     try {
-      const token = Cookies.get("token");
+      const token = Cookies.get("admin_token");
       const response = await api.get("/admin/rooms", {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -61,7 +62,7 @@ export default function AdminRoomsPage() {
     if (!window.confirm("Bạn có chắc chắn muốn xóa phòng này? Mọi dữ liệu liên quan sẽ bị xóa vĩnh viễn!")) return;
     
     try {
-      const token = Cookies.get("token");
+      const token = Cookies.get("admin_token");
       await api.delete(`/admin/rooms/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -169,7 +170,10 @@ export default function AdminRoomsPage() {
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-bold text-slate-900 mb-0.5">{room.name}</div>
-                          <div className="text-xs text-blue-600 font-bold bg-blue-50 inline-block px-2 py-0.5 rounded-md">{room.type}</div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-xs text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded-md">{room.type}</span>
+                            <span className="text-xs text-slate-500 font-medium bg-slate-100 px-2 py-0.5 rounded-md flex items-center"><svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>{room.location}</span>
+                          </div>
                         </div>
                       </div>
                     </td>

@@ -3,6 +3,17 @@ import * as authService from '../services/auth.service';
 import { sendSuccess } from '../utils/response';
 import { AuthRequest } from '../middlewares/auth.middleware';
 
+
+export const googleLogin = async (req: any, res: any, next: any) => {
+  try {
+    const result = await authService.googleLogin(req.body);
+    // Hàm sendSuccess nếu bạn dùng, hoặc tự trả res.json
+    res.status(200).json({ success: true, data: result, message: 'Đăng nhập Google thành công!' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Nhận dữ liệu từ Frontend gửi lên (req.body)
@@ -61,6 +72,26 @@ export const changePassword = async (req: AuthRequest, res: Response, next: Next
     const userId = req.user.userId;
     await authService.changePassword(userId, req.body);
     sendSuccess(res, null, 'Đổi mật khẩu thành công!');
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email } = req.body;
+    await authService.forgotPassword(email);
+    sendSuccess(res, null, 'Vui lòng kiểm tra email để đặt lại mật khẩu!');
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { token, newPassword } = req.body;
+    await authService.resetPassword(token, newPassword);
+    sendSuccess(res, null, 'Đặt lại mật khẩu thành công!');
   } catch (error: any) {
     next(error);
   }

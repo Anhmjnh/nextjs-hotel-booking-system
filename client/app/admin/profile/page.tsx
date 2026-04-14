@@ -36,7 +36,7 @@ export default function AdminProfilePage() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = Cookies.get("token");
+    const token = Cookies.get("admin_token");
     if (!token) {
       router.push("/login");
       return;
@@ -68,7 +68,7 @@ export default function AdminProfilePage() {
     if (!editData.name.trim()) return toast.error("Họ và tên không được để trống!");
     setIsSaving(true);
     try {
-      const token = Cookies.get("token");
+      const token = Cookies.get("admin_token");
       const response = await api.put("/auth/me", editData, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -133,7 +133,7 @@ export default function AdminProfilePage() {
 
     setIsSavingPassword(true);
     try {
-      const token = Cookies.get("token");
+      const token = Cookies.get("admin_token");
       await api.put("/auth/change-password", {
         oldPassword: passwordData.oldPassword,
         newPassword: passwordData.newPassword,

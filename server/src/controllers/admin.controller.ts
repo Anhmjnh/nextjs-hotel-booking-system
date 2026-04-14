@@ -1,11 +1,49 @@
 import { Response, NextFunction } from 'express';
 import * as adminService from '../services/admin.service';
+import * as offerService from '../services/offer.service';
 import { sendSuccess } from '../utils/response';
 
 export const getDashboardStats = async (req: any, res: Response, next: NextFunction) => {
   try {
     const stats = await adminService.getDashboardStats();
     sendSuccess(res, stats, 'Lấy thống kê thành công!');
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+// --- QUẢN LÝ ƯU ĐÃI (OFFERS) ---
+export const getOffers = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const offers = await offerService.getAllOffers();
+    sendSuccess(res, offers, 'Lấy danh sách ưu đãi thành công!');
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const createOffer = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const offer = await offerService.createOffer(req.body);
+    sendSuccess(res, offer, 'Tạo ưu đãi thành công!', 201);
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const updateOffer = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const offer = await offerService.updateOffer(Number(req.params.id), req.body);
+    sendSuccess(res, offer, 'Cập nhật ưu đãi thành công!');
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const deleteOffer = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    await offerService.deleteOffer(Number(req.params.id));
+    sendSuccess(res, null, 'Xóa ưu đãi thành công!');
   } catch (error: any) {
     next(error);
   }
@@ -111,6 +149,34 @@ export const deleteUser = async (req: any, res: Response, next: NextFunction) =>
     await adminService.deleteUser(adminId, Number(req.params.id));
     sendSuccess(res, null, 'Xóa người dùng thành công!');
   } catch (error: any) {
+    next(error);
+  }
+};
+export const getContacts = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const contacts = await adminService.getAdminContacts();
+    sendSuccess(res, contacts, "Lấy danh sách liên hệ thành công!");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateContact = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const contactId = Number(req.params.id);
+    const updatedContact = await adminService.updateContactStatus(contactId, req.body);
+    sendSuccess(res, updatedContact, "Cập nhật liên hệ thành công!");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteContact = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const contactId = Number(req.params.id);
+    await adminService.deleteContact(contactId);
+    sendSuccess(res, null, "Xóa liên hệ thành công!");
+  } catch (error) {
     next(error);
   }
 };

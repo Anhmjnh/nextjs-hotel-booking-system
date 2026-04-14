@@ -3,7 +3,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import routes from './routes';
 import { errorHandler } from './middlewares/errorHandler';
-
+import contactRoutes from './routes/contact.routes';
 const app: Application = express();
 
 // Middlewares
@@ -26,5 +26,7 @@ app.use('/api/v1', routes);
 
 // Middleware xử lý lỗi tập trung (Bắt buộc phải nằm dưới cùng)
 app.use(errorHandler);
+
+app.use('/api/v1/contacts', contactRoutes);
 
 export default app;

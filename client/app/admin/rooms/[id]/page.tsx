@@ -21,6 +21,7 @@ export default function AddEditRoomPage() {
   const [formData, setFormData] = useState({
     name: "",
     type: "SINGLE",
+    location: "TP. Hồ Chí Minh",
     pricePerNight: 0,
     capacity: 1,
     description: "",
@@ -45,6 +46,7 @@ export default function AddEditRoomPage() {
       setFormData({
         name: r.name,
         type: r.type,
+        location: r.location || "TP. Hồ Chí Minh",
         pricePerNight: r.pricePerNight,
         capacity: r.capacity,
         description: r.description,
@@ -178,6 +180,27 @@ export default function AddEditRoomPage() {
             </select>
           </div>
           <div>
+            <label className="block text-sm font-bold text-slate-700 mb-2">Vị trí (Tỉnh/Thành phố) *</label>
+            <input list="admin-locations" type="text" name="location" required value={formData.location} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition" placeholder="Chọn hoặc gõ tên tỉnh/thành phố..." />
+            <datalist id="admin-locations">
+              <option value="TP. Hồ Chí Minh" />
+              <option value="Hà Nội" />
+              <option value="Đà Nẵng" />
+              <option value="Nha Trang" />
+              <option value="Vũng Tàu" />
+              <option value="Đà Lạt" />
+              <option value="Phú Quốc" />
+              <option value="Hội An" />
+              <option value="Hạ Long" />
+              <option value="Sa Pa" />
+              <option value="Quy Nhơn" />
+              <option value="Phan Thiết" />
+              <option value="Cần Thơ" />
+              <option value="Hải Phòng" />
+              <option value="Huế" />
+            </datalist>
+          </div>
+          <div>
             <label className="block text-sm font-bold text-slate-700 mb-2">Giá mỗi đêm (VNĐ) *</label>
             <input type="number" name="pricePerNight" min="0" required value={formData.pricePerNight} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition" />
           </div>
@@ -203,7 +226,7 @@ export default function AddEditRoomPage() {
           <div className="flex flex-wrap gap-4 mb-4">
             {formData.images.map((img, index) => (
               <div key={index} className="relative w-24 h-24 rounded-xl border border-slate-200 overflow-hidden group">
-                <img src={img} alt="room" className="w-full h-full object-cover" />
+                <img src={img || undefined} alt="room" className="w-full h-full object-cover" />
                 <button type="button" onClick={() => removeImage(index)} className="absolute inset-0 bg-red-600/80 text-white opacity-0 group-hover:opacity-100 flex items-center justify-center transition">Xóa</button>
               </div>
             ))}

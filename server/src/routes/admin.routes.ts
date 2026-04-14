@@ -32,4 +32,15 @@ router.put('/users/:id/role', verifyToken, isAdmin, adminController.updateUserRo
 router.put('/users/:id', verifyToken, isAdmin, adminController.updateUserInfo);
 router.delete('/users/:id', verifyToken, isAdmin, adminController.deleteUser);
 
+// Quản lý Ưu đãi
+router.get('/offers', verifyToken, isAdmin, adminController.getOffers);
+router.post('/offers', verifyToken, isAdmin, adminController.createOffer);
+router.put('/offers/:id', verifyToken, isAdmin, adminController.updateOffer);
+router.delete('/offers/:id', verifyToken, isAdmin, adminController.deleteOffer);
+// Quản lý Liên hệ
+router.get('/contacts', adminController.getContacts);
+router.put('/contacts/:id', adminController.updateContact);
+router.delete('/contacts/:id', adminController.deleteContact);
+
+
 export default router;

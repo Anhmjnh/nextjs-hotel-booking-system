@@ -1,30 +1,39 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import api from "../../api";
 import RoomCard, { Room } from "../../components/RoomCard";
 import Header from "../header/page";
 import Footer from "../footer/page";
 
-export default function HotelsPage() {
+function HotelsContent() {
+  const searchParams = useSearchParams();
+  const queryLocation = searchParams.get("location") || "";
+  const queryCheckIn = searchParams.get("checkIn") || "";
+  const queryCheckOut = searchParams.get("checkOut") || "";
+  const queryGuests = searchParams.get("guests") || "all";
+
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // State dành cho Bộ lọc và Tìm kiếm
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(queryLocation);
   const [sortBy, setSortBy] = useState("default");
-  const [capacityFilter, setCapacityFilter] = useState("all");
+  const [capacityFilter, setCapacityFilter] = useState(queryGuests);
 
   // State dành cho Phân trang
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12; // 12 là con số hoàn hảo cho grid 1-2-3-4
 
   useEffect(() => {
-    // Gọi API lấy toàn bộ danh sách phòng từ Backend
     const fetchRooms = async () => {
       try {
-        const response = await api.get('/rooms');
+        // Đẩy Query Params xuống Backend để thực hiện lọc (Đặc biệt là lọc ngày chống trùng lịch)
+        const response = await api.get('/rooms', {
+          params: { location: queryLocation, checkIn: queryCheckIn, checkOut: queryCheckOut, capacity: queryGuests }
+        });
         if (response.data && response.data.data) {
           setRooms(response.data.data);
         }
@@ -37,16 +46,16 @@ export default function HotelsPage() {
     };
 
     fetchRooms();
-  }, []);
+  }, [queryLocation, queryCheckIn, queryCheckOut, queryGuests]);
 
   // Reset về trang 1 mỗi khi người dùng thay đổi Bộ lọc hoặc Tìm kiếm
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, sortBy, capacityFilter]);
 
-  // Logic lọc và sắp xếp dữ liệu (Chạy tự động mỗi khi state thay đổi)
+  // Logic lọc phụ (Tên phòng, Sắp xếp giá) ở phía Frontend
   const filteredRooms = rooms
-    .filter((room) => room.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter((room) => room.name.toLowerCase().includes(searchTerm.toLowerCase()) || (room.location && room.location.toLowerCase().includes(searchTerm.toLowerCase())))
     .filter((room) => capacityFilter === "all" ? true : room.capacity >= parseInt(capacityFilter))
     .sort((a, b) => {
       if (sortBy === "price_asc") return a.pricePerNight - b.pricePerNight;
@@ -136,7 +145,7 @@ export default function HotelsPage() {
           ) : rooms.length === 0 ? (
             /* Trạng thái DB trống chưa có phòng nào */
             <div className="text-center py-32 bg-white rounded-3xl shadow-sm border border-slate-100">
-              <p className="text-2xl font-bold text-slate-800 mb-2">Chưa có phòng nào 🏨</p>
+              <p className="text-2xl font-bold text-slate-800 mb-2">Chưa có phòng nào </p>
               <p className="text-slate-500 font-medium">Hệ thống đang cập nhật thêm các phòng mới. Vui lòng quay lại sau.</p>
             </div>
           ) : filteredRooms.length > 0 ? (
@@ -189,5 +198,13 @@ export default function HotelsPage() {
       {/* Kế thừa lại Footer */}
       <Footer />
     </div>
+  );
+}
+
+export default function HotelsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>}>
+      <HotelsContent />
+    </Suspense>
   );
 }

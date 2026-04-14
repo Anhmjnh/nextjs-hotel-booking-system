@@ -11,8 +11,19 @@ interface Booking {
   checkOutDate: string;
   totalDays: number;
   totalPrice: number;
+  paymentMethod: string;
+  appliedCode: string | null;
+  discountAmount: number;
+  guestName: string | null;
+  guestPhone: string | null;
+  guestCount: number;
   status: string;
+  specialRequest: string | null;
   createdAt: string;
+  payment: {
+    status: string;
+    amount: number;
+  } | null;
   user: {
     name: string;
     email: string;
@@ -43,7 +54,7 @@ export default function AdminBookingsPage() {
 
   const fetchBookings = async () => {
     try {
-      const token = Cookies.get("token");
+      const token = Cookies.get("admin_token");
       const response = await api.get("/admin/bookings", {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -59,14 +70,14 @@ export default function AdminBookingsPage() {
 
   const handleUpdateStatus = async (id: number, newStatus: string) => {
     try {
-      const token = Cookies.get("token");
+      const token = Cookies.get("admin_token");
       await api.put(`/admin/bookings/${id}/status`, { status: newStatus }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success("Cập nhật trạng thái thành công!");
       
-      // Cập nhật lại giao diện ngay lập tức
-      setBookings(prev => prev.map(b => b.id === id ? { ...b, status: newStatus } : b));
+      // Tải lại danh sách để lấy thông tin Hóa đơn (Payment) mới nhất từ DB
+      fetchBookings();
     } catch (error) {
       interface ApiError {
         response?: { data?: { message?: string } };
@@ -78,7 +89,8 @@ export default function AdminBookingsPage() {
 
   // Logic Lọc & Phân trang
   const filteredBookings = bookings.filter(b => {
-    const matchSearch = b.user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const matchSearch = b.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        (b.guestName && b.guestName.toLowerCase().includes(searchTerm.toLowerCase())) ||
                         b.room.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchStatus = statusFilter === "all" || b.status === statusFilter;
     return matchSearch && matchStatus;
@@ -113,6 +125,7 @@ export default function AdminBookingsPage() {
             <option value="all">Tất cả trạng thái</option>
             <option value="PENDING">Chờ thanh toán</option>
             <option value="CONFIRMED">Đã xác nhận</option>
+            <option value="COMPLETED">Đã hoàn thành</option>
             <option value="CANCELLED">Đã hủy</option>
           </select>
         </div>
@@ -136,32 +149,58 @@ export default function AdminBookingsPage() {
                 currentBookings.map((b) => (
                   <tr key={b.id} className="hover:bg-slate-50/80 transition duration-200">
                     <td className="px-8 py-5 whitespace-nowrap">
-                      <div className="text-sm font-bold text-slate-900">{b.user.name}</div>
+                      <div className="text-sm font-bold text-slate-900">{b.guestName || b.user.name}</div>
                       <div className="text-sm text-slate-500 mt-1">{b.user.email}</div>
-                      <div className="text-xs text-slate-400 mt-1">{b.user.phone || 'Không có SĐT'}</div>
+                      <div className="text-xs text-slate-400 mt-1">{b.guestPhone || b.user.phone || 'Không có SĐT'} • {b.guestCount || 1} khách</div>
                     </td>
                     <td className="px-8 py-5 whitespace-nowrap">
                       <div className="text-sm font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-md inline-block mb-2">{b.room.name}</div>
                       <div className="text-sm font-medium text-slate-700">
                         {new Date(b.checkInDate).toLocaleDateString("vi-VN")} <span className="text-slate-400 mx-1">&rarr;</span> {new Date(b.checkOutDate).toLocaleDateString("vi-VN")}
                       </div>
+                      {b.specialRequest && (
+                        <div className="mt-2 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1.5 rounded-lg border border-orange-100 flex items-start gap-1.5 whitespace-normal w-max max-w-xs">
+                          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          <span className="leading-snug line-clamp-2" title={b.specialRequest}>{b.specialRequest}</span>
+                        </div>
+                      )}
                     </td>
                     <td className="px-8 py-5 whitespace-nowrap text-sm font-black text-slate-900">
-                      {b.totalPrice.toLocaleString('vi-VN')} ₫
+                      <div>{b.totalPrice.toLocaleString('vi-VN')} ₫</div>
+                      {b.discountAmount > 0 && (
+                        <div className="text-xs text-green-600 font-medium mt-0.5">- {b.discountAmount.toLocaleString('vi-VN')} ₫ (Mã: {b.appliedCode})</div>
+                      )}
+                      {b.status === 'CANCELLED' ? (
+                        <div className="mt-1 text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-md inline-block uppercase tracking-wider border border-red-200">Đã hủy đơn</div>
+                      ) : b.paymentMethod === 'ONLINE' ? (
+                        b.payment?.status === 'PAID' ? (
+                          <div className="mt-1 text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-md inline-block uppercase tracking-wider border border-green-200">Đã TT Online</div>
+                        ) : (
+                          <div className="mt-1 text-[10px] font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md inline-block uppercase tracking-wider border border-orange-200">Chờ TT Online</div>
+                        )
+                      ) : (
+                        b.payment?.status === 'PAID' ? (
+                          <div className="mt-1 text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-md inline-block uppercase tracking-wider border border-green-200">Đã thu Tiền mặt</div>
+                        ) : (
+                          <div className="mt-1 text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md inline-block uppercase tracking-wider border border-slate-200">Chờ thu Tiền mặt</div>
+                        )
+                      )}
                     </td>
                     <td className="px-8 py-5 whitespace-nowrap">
                       <select 
                         value={b.status} 
                         onChange={(e) => handleUpdateStatus(b.id, e.target.value)}
-                        disabled={b.status === 'CONFIRMED' || b.status === 'CANCELLED'}
+                        disabled={b.status === 'COMPLETED' || b.status === 'CANCELLED'}
                         className={`text-xs font-bold px-3 py-2 rounded-xl outline-none border-2 transition-colors
-                          ${b.status === 'CONFIRMED' ? 'bg-green-50 text-green-700 border-green-200 focus:border-green-500' : 
+                          ${b.status === 'CONFIRMED' ? 'bg-blue-50 text-blue-700 border-blue-200 focus:border-blue-500' : 
+                            b.status === 'COMPLETED' ? 'bg-green-50 text-green-700 border-green-200 focus:border-green-500' : 
                             b.status === 'PENDING' ? 'bg-orange-50 text-orange-700 border-orange-200 focus:border-orange-500 cursor-pointer' : 
                             'bg-red-50 text-red-700 border-red-200'}
-                          ${(b.status === 'CONFIRMED' || b.status === 'CANCELLED') ? 'opacity-70 cursor-not-allowed' : ''}`}
+                          ${(b.status === 'COMPLETED' || b.status === 'CANCELLED') ? 'opacity-70 cursor-not-allowed' : ''}`}
                       >
                         <option value="PENDING">Chờ thanh toán</option>
                         <option value="CONFIRMED">Đã xác nhận</option>
+                        <option value="COMPLETED">Hoàn thành / Check-out</option>
                         <option value="CANCELLED">Đã hủy</option>
                       </select>
                     </td>

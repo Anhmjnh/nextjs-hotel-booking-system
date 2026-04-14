@@ -12,6 +12,18 @@ export default function HomePage() {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loadingRooms, setLoadingRooms] = useState(true);
   const router = useRouter();
+  
+  const popularLocations = [
+    "TP. Hồ Chí Minh", "Hà Nội", "Đà Nẵng", "Nha Trang", "Vũng Tàu", "Đà Lạt", "Phú Quốc", "Hội An", "Hạ Long", "Sa Pa", "Quy Nhơn", "Phan Thiết", "Cần Thơ", "Hải Phòng", "Huế"
+  ];
+
+  const [searchData, setSearchData] = useState({
+    location: "",
+    checkIn: "",
+    checkOut: "",
+    guests: 1
+  });
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
 
   useEffect(() => {
     // Hàm gọi API lấy danh sách phòng
@@ -30,6 +42,16 @@ export default function HomePage() {
 
     fetchRooms();
   }, []);
+
+  const handleSearch = () => {
+    // Lưu ngày vào bộ nhớ tạm để trang Checkout tự động lấy ra dùng
+    if (searchData.checkIn && searchData.checkOut) {
+      localStorage.setItem("booking_dates", JSON.stringify({ checkIn: searchData.checkIn, checkOut: searchData.checkOut }));
+    }
+    
+    // Chuyển hướng và truyền dữ liệu lên thanh URL (URL Syncing)
+    router.push(`/hotels?location=${searchData.location}&checkIn=${searchData.checkIn}&checkOut=${searchData.checkOut}&guests=${searchData.guests}`);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -51,14 +73,84 @@ export default function HomePage() {
           </p>
           
           {/* Thanh tìm kiếm Floating Island */}
-          <div className="bg-white p-3 rounded-[2rem] shadow-2xl flex items-center w-full max-w-4xl mx-auto text-gray-800 backdrop-blur-xl">
-            <input type="text" placeholder="Bạn muốn đi đâu?" className="flex-1 px-6 py-4 rounded-l-full outline-none font-medium placeholder-gray-400 focus:bg-gray-50 transition" />
-            <div className="w-px h-12 bg-gray-200 mx-2"></div>
-            <input type="date" className="w-48 px-4 py-4 outline-none font-medium text-gray-600 cursor-pointer focus:bg-gray-50 transition" />
-            <div className="w-px h-12 bg-gray-200 mx-2"></div>
-            <button className="bg-blue-600 text-white px-10 py-4 rounded-full font-bold hover:bg-blue-700 transition duration-300 shadow-md whitespace-nowrap">
-              Tìm phòng ngay
-            </button>
+          <div className="bg-white p-3 rounded-[2rem] shadow-2xl flex flex-col lg:flex-row items-center w-full max-w-5xl mx-auto text-gray-800 backdrop-blur-xl gap-2 relative z-20">
+            
+            {/* Vị trí */}
+            <div className="flex-1 w-full flex items-center px-6 py-3 hover:bg-gray-50 rounded-full transition relative">
+              <svg className="w-6 h-6 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              <div className="ml-4 flex-1 text-left">
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">Địa điểm</p>
+                <input 
+                  type="text" 
+                  placeholder="Bạn muốn đi đâu?" 
+                  value={searchData.location} 
+                  onChange={(e) => {
+                    setSearchData({...searchData, location: e.target.value});
+                    setShowLocationDropdown(true);
+                  }} 
+                  onFocus={() => setShowLocationDropdown(true)}
+                  onBlur={() => setTimeout(() => setShowLocationDropdown(false), 200)}
+                  className="w-full bg-transparent outline-none font-bold text-gray-900 placeholder-gray-400" 
+                />
+
+                {/* Giao diện Dropdown Tùy chỉnh Cao cấp */}
+                {showLocationDropdown && (
+                  <div className="absolute top-[120%] left-0 w-full md:w-[120%] bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden z-50 py-4 px-2">
+                    <p className="text-xs font-bold text-gray-400 px-4 mb-2 uppercase tracking-wider">Địa điểm phổ biến</p>
+                    <div className="max-h-64 overflow-y-auto">
+                      {popularLocations
+                        .filter(loc => loc.toLowerCase().includes(searchData.location.toLowerCase()))
+                        .map((loc, idx) => (
+                          <div key={idx} onClick={() => { setSearchData({...searchData, location: loc}); setShowLocationDropdown(false); }} className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer rounded-2xl transition mx-2 group">
+                            <div className="w-10 h-10 bg-gray-100 group-hover:bg-white group-hover:text-blue-600 rounded-xl flex items-center justify-center mr-4 text-gray-500 transition shadow-sm">
+                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </div>
+                            <span className="font-bold text-gray-700 group-hover:text-blue-700 transition">{loc}</span>
+                          </div>
+                      ))}
+                      {popularLocations.filter(loc => loc.toLowerCase().includes(searchData.location.toLowerCase())).length === 0 && (
+                        <div className="px-6 py-4 text-sm text-gray-500 font-medium">Không tìm thấy địa điểm đề xuất. Hệ thống vẫn sẽ tìm theo từ khóa của bạn!</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="hidden lg:block w-px h-12 bg-gray-200"></div>
+            
+            {/* Check-in & Check-out */}
+            <div className="w-full lg:w-auto flex items-center px-6 py-3 hover:bg-gray-50 rounded-full transition">
+              <svg className="w-6 h-6 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+              <div className="ml-4 text-left flex items-center gap-2">
+                <div>
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">Nhận phòng</p>
+                  <input type="date" value={searchData.checkIn} onChange={(e) => setSearchData({...searchData, checkIn: e.target.value})} className="bg-transparent outline-none font-bold text-gray-900 cursor-pointer w-28" />
+                </div>
+                <span className="text-gray-300">-</span>
+                <div>
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">Trả phòng</p>
+                  <input type="date" value={searchData.checkOut} min={searchData.checkIn} onChange={(e) => setSearchData({...searchData, checkOut: e.target.value})} className="bg-transparent outline-none font-bold text-gray-900 cursor-pointer w-28" />
+                </div>
+              </div>
+            </div>
+            <div className="hidden lg:block w-px h-12 bg-gray-200"></div>
+
+            {/* Số khách & Nút Tìm kiếm */}
+            <div className="w-full lg:w-auto flex items-center justify-between px-2 py-2 pl-6 hover:bg-gray-50 rounded-full transition">
+              <div className="text-left mr-6">
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">Khách</p>
+                <div className="flex items-center gap-3">
+                  <button onClick={() => setSearchData(prev => ({...prev, guests: Math.max(1, prev.guests - 1)}))} className="text-gray-400 hover:text-blue-600 font-black text-xl w-6">-</button>
+                  <span className="font-bold text-gray-900 w-4 text-center">{searchData.guests}</span>
+                  <button onClick={() => setSearchData(prev => ({...prev, guests: prev.guests + 1}))} className="text-gray-400 hover:text-blue-600 font-black text-xl w-6">+</button>
+                </div>
+              </div>
+              <button onClick={handleSearch} className="bg-blue-600 text-white px-8 py-4 rounded-full font-bold hover:bg-blue-700 transition duration-300 shadow-lg shadow-blue-600/30 whitespace-nowrap flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                Tìm kiếm
+              </button>
+            </div>
+
           </div>
         </div>
       </section>

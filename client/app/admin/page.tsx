@@ -25,7 +25,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const token = Cookies.get("token");
+        const token = Cookies.get("admin_token");
         const response = await api.get("/admin/dashboard", {
           headers: { Authorization: `Bearer ${token}` }
         });

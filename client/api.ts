@@ -11,7 +11,9 @@ const api = axios.create({
 
 // Interceptor: Trước khi gửi bất kỳ request nào, tự động đính kèm Token nếu có
 api.interceptors.request.use((config) => {
-  const token = Cookies.get('token'); // Lấy token từ Cookie trình duyệt
+  const isAdminRoute = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin');
+  const token = Cookies.get(isAdminRoute ? 'admin_token' : 'token');
+  
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

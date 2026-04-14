@@ -11,6 +11,7 @@ export interface Room {
   type: string;
   amenities: string[];
   images: string[];
+  location: string;
   isAvailable: boolean;
 }
 
@@ -38,6 +39,10 @@ export default function RoomCard({ room }: { room: Room }) {
         <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition line-clamp-1">{room.name}</h3>
         
         <div className="flex items-center text-sm text-gray-500 mb-3 space-x-4">
+          <span className="flex items-center">
+            <svg className="w-4 h-4 mr-1 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            {room.location || "Đang cập nhật"}
+          </span>
           <span className="flex items-center">
             <svg className="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
             Tối đa {room.capacity} người
