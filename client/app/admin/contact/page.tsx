@@ -20,7 +20,7 @@ export default function AdminContactsPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -59,9 +59,9 @@ export default function AdminContactsPage() {
       });
       toast.success("Cập nhật trạng thái thành công!");
       setContacts(prev => prev.map(c => c.id === id ? { ...c, isRead: !currentStatus } : c));
-      
+
       if (selectedContact && selectedContact.id === id) {
-          setSelectedContact({ ...selectedContact, isRead: !currentStatus });
+        setSelectedContact({ ...selectedContact, isRead: !currentStatus });
       }
     } catch (error) {
       toast.error("Cập nhật thất bại!");
@@ -78,7 +78,7 @@ export default function AdminContactsPage() {
       toast.success("Xóa tin nhắn thành công!");
       setContacts(prev => prev.filter(c => c.id !== id));
       if (selectedContact && selectedContact.id === id) {
-          setSelectedContact(null);
+        setSelectedContact(null);
       }
     } catch (error) {
       toast.error("Xóa thất bại!");
@@ -86,17 +86,17 @@ export default function AdminContactsPage() {
   };
 
   const handleViewDetails = async (contact: Contact) => {
-      setSelectedContact(contact);
-      // Nếu tin nhắn chưa đọc, khi click xem chi tiết sẽ tự động đánh dấu là đã đọc
-      if (!contact.isRead) {
-          await handleToggleRead(contact.id, contact.isRead);
-      }
+    setSelectedContact(contact);
+    // Nếu tin nhắn chưa đọc, khi click xem chi tiết sẽ tự động đánh dấu là đã đọc
+    if (!contact.isRead) {
+      await handleToggleRead(contact.id, contact.isRead);
+    }
   }
 
   const filteredContacts = contacts.filter(c => {
-    const matchSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                        c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        c.subject.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.subject.toLowerCase().includes(searchTerm.toLowerCase());
     const matchStatus = statusFilter === "all" || (statusFilter === "read" ? c.isRead : !c.isRead);
     return matchSearch && matchStatus;
   });
@@ -117,10 +117,10 @@ export default function AdminContactsPage() {
 
       <div className="mb-8 flex flex-col md:flex-row gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
         <div className="flex-1 relative">
-           <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-           </span>
-           <input type="text" placeholder="Tìm theo tên, email, chủ đề..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 outline-none transition font-medium text-slate-700" />
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </span>
+          <input type="text" placeholder="Tìm theo tên, email, chủ đề..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 outline-none transition font-medium text-slate-700" />
         </div>
         <div className="w-full md:w-64">
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 outline-none font-medium text-slate-700 bg-white">
@@ -180,7 +180,7 @@ export default function AdminContactsPage() {
             </tbody>
           </table>
         </div>
-        
+
         {totalPages > 1 && (
           <div className="px-8 py-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
             <span className="text-sm text-slate-500 font-medium">Trang {currentPage} / {totalPages}</span>
@@ -206,13 +206,13 @@ export default function AdminContactsPage() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
               </button>
             </div>
-            
+
             <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 mb-8 whitespace-pre-wrap text-slate-700 font-medium leading-relaxed max-h-[50vh] overflow-y-auto">
               {selectedContact.message}
             </div>
 
             <div className="flex gap-4">
-              <a 
+              <a
                 href={`https://mail.google.com/mail/?view=cm&fs=1&to=${selectedContact.email}&su=${encodeURIComponent("Phản hồi: " + selectedContact.subject)}&body=${encodeURIComponent("\n\n\n---------------------------------\nTrích dẫn lời nhắn của bạn lúc " + new Date(selectedContact.createdAt).toLocaleString("vi-VN") + ":\n\n" + selectedContact.message)}`}
                 target="_blank"
                 rel="noopener noreferrer"

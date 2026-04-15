@@ -12,6 +12,7 @@ interface User {
   phone: string | null;
   avatar: string | null;
   role: string;
+  isLocked: boolean;
   createdAt: string;
 }
 
@@ -19,7 +20,7 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-  
+
   // State Sửa thông tin
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [editFormData, setEditFormData] = useState({ name: "", phone: "", password: "", oldPassword: "" });
@@ -39,7 +40,7 @@ export default function AdminUsersPage() {
         const payloadBase64 = token.split(".")[1];
         const decoded = JSON.parse(atob(payloadBase64));
         setCurrentUserId(decoded.userId);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     fetchUsers();
@@ -72,7 +73,7 @@ export default function AdminUsersPage() {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success("Cập nhật phân quyền thành công!");
-      
+
       // Cập nhật lại giao diện
       setUsers(prev => prev.map(u => u.id === id ? { ...u, role: newRole } : u));
     } catch (error) {
@@ -86,7 +87,7 @@ export default function AdminUsersPage() {
 
   const handleDeleteUser = async (id: number) => {
     if (!window.confirm("Bạn có chắc chắn muốn xóa người dùng này? Thao tác này không thể hoàn tác!")) return;
-    
+
     try {
       const token = Cookies.get("admin_token");
       await api.delete(`/admin/users/${id}`, {
@@ -100,6 +101,28 @@ export default function AdminUsersPage() {
       }
       const err = error as ApiError;
       toast.error(err.response?.data?.message || "Xóa người dùng thất bại!");
+    }
+  };
+
+  const handleToggleLock = async (id: number, isCurrentlyLocked: boolean) => {
+    const action = isCurrentlyLocked ? "mở khóa" : "khóa";
+    if (!window.confirm(`Bạn có chắc chắn muốn ${action} tài khoản này?`)) return;
+
+    try {
+      const token = Cookies.get("admin_token");
+      await api.put(`/admin/users/${id}/lock`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success(`${isCurrentlyLocked ? "Mở khóa" : "Khóa"} tài khoản thành công!`);
+
+      // Cập nhật lại giao diện
+      setUsers(prev => prev.map(u => u.id === id ? { ...u, isLocked: !isCurrentlyLocked } : u));
+    } catch (error) {
+      interface ApiError {
+        response?: { data?: { message?: string } };
+      }
+      const err = error as ApiError;
+      toast.error(err.response?.data?.message || "Thao tác thất bại!");
     }
   };
 
@@ -123,7 +146,7 @@ export default function AdminUsersPage() {
     if (editingUser.role === 'ADMIN' && editFormData.password && !editFormData.oldPassword) {
       return toast.error("Vui lòng nhập mật khẩu cũ để đổi mật khẩu Quản trị viên!");
     }
-    
+
     setIsSaving(true);
     try {
       const token = Cookies.get("admin_token");
@@ -131,7 +154,7 @@ export default function AdminUsersPage() {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success("Cập nhật thông tin thành công!");
-      
+
       setUsers(prev => prev.map(u => u.id === editingUser.id ? { ...u, name: editFormData.name, phone: editFormData.phone } : u));
       setEditingUser(null);
     } catch (error) {
@@ -146,13 +169,13 @@ export default function AdminUsersPage() {
   };
 
   // Logic Lọc & Phân trang
-  const filteredUsers = users.filter(u => 
+  const filteredUsers = users.filter(u =>
     (roleFilter === "all" || u.role === roleFilter) &&
-    (u.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-     u.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     (u.phone && u.phone.includes(searchTerm)))
+    (u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      u.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (u.phone && u.phone.includes(searchTerm)))
   );
-  
+
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const currentUsers = filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
@@ -172,10 +195,10 @@ export default function AdminUsersPage() {
       {/* Thanh công cụ Tìm kiếm & Bộ lọc */}
       <div className="mb-8 flex flex-col md:flex-row gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
         <div className="flex-1 relative">
-           <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-           </span>
-           <input type="text" placeholder="Tìm tên, email hoặc SĐT..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition font-medium text-slate-700" />
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </span>
+          <input type="text" placeholder="Tìm tên, email hoặc SĐT..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition font-medium text-slate-700" />
         </div>
         <div className="w-full md:w-64">
           <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 outline-none font-medium text-slate-700 bg-white">
@@ -214,7 +237,10 @@ export default function AdminUsersPage() {
                           )}
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-bold text-slate-900">{u.name}</div>
+                          <div className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                            {u.name}
+                            {u.isLocked && <span className="px-2 py-0.5 text-xs font-bold text-red-700 bg-red-100 rounded-full">Đã khóa</span>}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -226,8 +252,8 @@ export default function AdminUsersPage() {
                       {new Date(u.createdAt).toLocaleDateString("vi-VN")}
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap">
-                      <select 
-                        value={u.role} 
+                      <select
+                        value={u.role}
                         onChange={(e) => handleUpdateRole(u.id, e.target.value)}
                         disabled={u.id === currentUserId}
                         className={`text-xs font-bold px-3 py-1.5 rounded-lg outline-none cursor-pointer border-2 transition-colors
@@ -241,6 +267,14 @@ export default function AdminUsersPage() {
                     </td>
                     <td className="px-8 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={() => handleToggleLock(u.id, u.isLocked)}
+                          disabled={u.id === currentUserId}
+                          className={`p-2 rounded-lg transition-colors ${u.isLocked ? 'text-yellow-600 bg-yellow-50 hover:bg-yellow-600 hover:text-white' : 'text-gray-500 bg-gray-100 hover:bg-gray-600 hover:text-white'} ${u.id === currentUserId ? 'opacity-30 cursor-not-allowed' : ''}`}
+                          title={u.isLocked ? "Mở khóa tài khoản" : "Khóa tài khoản"}
+                        >
+                          {u.isLocked ? <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg> : <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>}
+                        </button>
                         <button onClick={() => { setEditingUser(u); setEditFormData({ name: u.name, phone: u.phone || "", password: "", oldPassword: "" }); }} className="p-2 text-blue-600 bg-blue-50 hover:bg-blue-600 hover:text-white rounded-lg transition-colors">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                         </button>
@@ -255,7 +289,7 @@ export default function AdminUsersPage() {
             </tbody>
           </table>
         </div>
-        
+
         {/* Phân trang */}
         {totalPages > 1 && (
           <div className="px-8 py-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between">

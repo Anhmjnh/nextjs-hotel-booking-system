@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 
-// Định nghĩa kiểu dữ liệu khớp với cấu trúc Database Prisma của bạn
+
 export interface Room {
   id: number;
   name: string;
@@ -17,8 +17,8 @@ export interface Room {
 
 export default function RoomCard({ room }: { room: Room }) {
   // Lấy ảnh đầu tiên trong mảng images làm ảnh đại diện, nếu mảng rỗng thì dùng ảnh mặc định
-  const coverImage = room.images && room.images.length > 0 
-    ? room.images[0] 
+  const coverImage = room.images && room.images.length > 0
+    ? room.images[0]
     : "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop";
 
   return (
@@ -34,10 +34,10 @@ export default function RoomCard({ room }: { room: Room }) {
           {room.type}
         </div>
       </div>
-      
+
       <div className="p-6 flex flex-col flex-1">
         <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition line-clamp-1">{room.name}</h3>
-        
+
         <div className="flex items-center text-sm text-gray-500 mb-3 space-x-4">
           <span className="flex items-center">
             <svg className="w-4 h-4 mr-1 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -50,7 +50,7 @@ export default function RoomCard({ room }: { room: Room }) {
         </div>
 
         <p className="text-gray-500 text-sm mb-4 line-clamp-2 flex-1">{room.description}</p>
-        
+
         <div className="flex flex-wrap gap-2 mb-6">
           {room.amenities && room.amenities.slice(0, 3).map((amenity, index) => (
             <span key={index} className="text-xs bg-blue-50 text-blue-600 border border-blue-100 px-2 py-1 rounded-md font-medium">{amenity}</span>

@@ -12,11 +12,12 @@ export const createPaymentSessionHandler = async (req: Request, res: Response) =
 };
 
 export const webhookHandler = async (req: Request, res: Response) => {
+  const sig = req.headers['stripe-signature'] as string;
   try {
-    const sig = req.headers['stripe-signature'] as string;
     await handleStripeWebhook(req.body, sig);
-    res.status(200).json({ received: true });
+    res.status(200).send('Webhook received successfully');
   } catch (error: any) {
+    console.error(`Webhook Error: ${error.message}`);
     res.status(400).send(`Webhook Error: ${error.message}`);
   }
 };

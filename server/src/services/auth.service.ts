@@ -8,6 +8,11 @@ export const googleLogin = async (data: { email: string, name: string, avatar: s
   const email = data.email.trim().toLowerCase();
   let user = await prisma.user.findUnique({ where: { email } });
 
+  // Kiểm tra tài khoản có bị khóa không
+  if (user && user.isLocked) {
+    throw new Error('Tài khoản của bạn đã bị khóa. .');
+  }
+
   if (!user) {
     // Nếu chưa từng có tài khoản -> Tạo mới hoàn toàn
     user = await prisma.user.create({
@@ -67,6 +72,11 @@ export const loginUser = async (data: any) => {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) {
     throw new Error('Email hoặc mật khẩu không chính xác!');
+  }
+
+  // Kiểm tra tài khoản có bị khóa không
+  if (user.isLocked) {
+    throw new Error('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.');
   }
 
   if (!user.password) {

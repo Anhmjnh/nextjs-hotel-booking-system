@@ -4,13 +4,14 @@ import cors from 'cors';
 import routes from './routes';
 import { errorHandler } from './middlewares/errorHandler';
 import contactRoutes from './routes/contact.routes';
+import paymentRoutes from './routes/payment.routes';
 const app: Application = express();
 
 // Middlewares
 app.use(cors());
 
-// Webhook của Stripe cần body ở dạng Raw Buffer để xác thực chữ ký
-app.use('/api/v1/payments/webhook', express.raw({ type: 'application/json' }));
+// Đăng ký Payment Routes 
+app.use('/api/v1/payments', paymentRoutes);
 
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
@@ -21,10 +22,10 @@ app.get('/', (req, res) => {
   res.send('Welcome to Hotel Booking API 🚀');
 });
 
-// Gắn toàn bộ Routes của ứng dụng (Thêm prefix /api/v1)
+// Gắn toàn bộ Routes của ứng dụng 
 app.use('/api/v1', routes);
 
-// Middleware xử lý lỗi tập trung (Bắt buộc phải nằm dưới cùng)
+// Middleware xử lý lỗi tập trung 
 app.use(errorHandler);
 
 app.use('/api/v1/contacts', contactRoutes);

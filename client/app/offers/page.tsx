@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Header from "../header/page";
 import Footer from "../footer/page";
-import toast from "react-hot-toast"; // Dùng thư viện toast có sẵn của bạn để thông báo
+import toast from "react-hot-toast";
 import api from "../../api";
 
 export interface Offer {

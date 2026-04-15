@@ -65,7 +65,7 @@ export default function ContactPage() {
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">Địa chỉ</h3>
                   <p className="text-slate-500 font-medium leading-relaxed">Đường Âu Cơ, Phường 10, Quận Tân Bình, TP.HCM</p>
-                  
+
                 </div>
               </div>
 

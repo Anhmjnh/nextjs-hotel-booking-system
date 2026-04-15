@@ -49,7 +49,7 @@ export const validateOffer = async (req: Request, res: Response) => {
     const { code, orderValue } = req.body;
     const offer = await prisma.offer.findUnique({ where: { code } });
     if (!offer) throw new Error("Mã giảm giá không tồn tại!");
-    
+
     const now = new Date();
     if (now < offer.startDate || now > offer.endDate) throw new Error("Mã giảm giá đã hết hạn hoặc chưa áp dụng!");
     if (offer.minOrderValue && orderValue < offer.minOrderValue) throw new Error(`Đơn hàng cần đạt tối thiểu ${offer.minOrderValue.toLocaleString('vi-VN')}đ`);

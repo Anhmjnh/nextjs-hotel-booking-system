@@ -2,7 +2,7 @@ import { Router } from 'express';
 import authRoutes from './auth.routes';
 import roomRoutes from './room.routes';
 import bookingRoutes from './booking.route';
-import paymentRoutes from './payment.route';
+import paymentRoutes from './payment.routes';
 import offerRoutes from './offer.routes';
 import adminRoutes from './admin.routes';
 

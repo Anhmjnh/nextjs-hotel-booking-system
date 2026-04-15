@@ -17,7 +17,7 @@ export const verifyToken = (req: AuthRequest, res: Response, next: NextFunction)
 
     const token = authHeader.split(' ')[1];
 
-    // Giải mã token để lấy thông tin (ví dụ: userId, role)
+    // Giải mã token để lấy thông tin 
     const secret = process.env.JWT_SECRET || 'default_secret';
     const decoded = jwt.verify(token, secret);
 

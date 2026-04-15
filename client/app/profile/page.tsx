@@ -112,7 +112,7 @@ export default function ProfilePage() {
       // 1. Upload ảnh lên nền tảng Cloudinary
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("upload_preset", "booking_hotel"); // Tên cấu hình upload (Sẽ hướng dẫn tạo bên dưới)
+      formData.append("upload_preset", "booking_hotel"); // Tên cấu hình upload 
 
       // Gọi API Cloudinary 
       const cloudinaryRes = await fetch("https://api.cloudinary.com/v1_1/dp42o9sek/image/upload", {

@@ -31,6 +31,7 @@ router.get('/users', verifyToken, isAdmin, adminController.getUsers);
 router.put('/users/:id/role', verifyToken, isAdmin, adminController.updateUserRole);
 router.put('/users/:id', verifyToken, isAdmin, adminController.updateUserInfo);
 router.delete('/users/:id', verifyToken, isAdmin, adminController.deleteUser);
+router.put('/users/:id/lock', verifyToken, isAdmin, adminController.toggleUserLock);
 
 // Quản lý Ưu đãi
 router.get('/offers', verifyToken, isAdmin, adminController.getOffers);

@@ -98,7 +98,7 @@ function HotelsContent() {
               </span>
               <input type="text" placeholder="Tìm tên khách sạn, tên phòng..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition font-medium text-slate-700" />
             </div>
-            
+
             <div className="w-full md:w-56">
               <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition font-medium text-slate-700 cursor-pointer appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%24%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.2em_1.2em] bg-no-repeat bg-[position:right_1rem_center]">
                 <option value="default">Sắp xếp: Mới nhất</option>
@@ -160,8 +160,8 @@ function HotelsContent() {
               {/* Nút Điều hướng Phân trang */}
               {totalPages > 1 && (
                 <div className="mt-14 flex justify-center items-center gap-2 sm:gap-3">
-                  <button 
-                    onClick={() => handlePageChange(Math.max(currentPage - 1, 1))} 
+                  <button
+                    onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
                     disabled={currentPage === 1}
                     className="px-4 py-2.5 rounded-xl font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
                   >
@@ -175,8 +175,8 @@ function HotelsContent() {
                     </button>
                   ))}
 
-                  <button 
-                    onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))} 
+                  <button
+                    onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
                     disabled={currentPage === totalPages}
                     className="px-4 py-2.5 rounded-xl font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
                   >

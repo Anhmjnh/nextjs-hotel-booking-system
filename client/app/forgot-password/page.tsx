@@ -16,7 +16,7 @@ export default function ForgotPasswordPage() {
     setLoading(true);
     try {
       await api.post("/auth/forgot-password", { email });
-      setIsSent(true); 
+      setIsSent(true);
       toast.success("Gửi Email thành công!");
     } catch (error) {
       const errorMessage = axios.isAxiosError(error) ? error.response?.data?.message || "Có lỗi xảy ra!" : "Có lỗi xảy ra!";
@@ -43,7 +43,7 @@ export default function ForgotPasswordPage() {
               <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
             </div>
             <div className="p-4 bg-green-50 text-green-700 rounded-xl border border-green-200 font-medium text-sm">
-              Một email chứa liên kết đặt lại mật khẩu đã được gửi đến <b>{email}</b>.<br/><br/> Vui lòng kiểm tra hộp thư đến (hoặc thư mục Spam) của bạn.
+              Một email chứa liên kết đặt lại mật khẩu đã được gửi đến <b>{email}</b>.<br /><br /> Vui lòng kiểm tra hộp thư đến (hoặc thư mục Spam) của bạn.
             </div>
             <Link href="/login" className="block w-full text-slate-500 font-bold hover:text-slate-700 transition">Quay lại Đăng nhập</Link>
           </div>

@@ -19,7 +19,7 @@ interface Room {
 export default function CheckoutPage() {
   const { id } = useParams();
   const router = useRouter();
-  
+
   const [room, setRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,7 +29,7 @@ export default function CheckoutPage() {
   const [specialRequest, setSpecialRequest] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("ONLINE");
   const [guestInfo, setGuestInfo] = useState({ name: "", phone: "", count: 1 });
-  
+
   // Discount Logic
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromo, setAppliedPromo] = useState<{ code: string, discount: number } | null>(null);
@@ -84,7 +84,7 @@ export default function CheckoutPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!dates.checkIn || !dates.checkOut) return toast.error("Vui lòng chọn ngày Check-in và Check-out!");
-    
+
     setIsSubmitting(true);
     try {
       const response = await api.post("/bookings", {
@@ -98,7 +98,7 @@ export default function CheckoutPage() {
         guestPhone: guestInfo.phone,
         guestCount: guestInfo.count
       });
-      
+
       toast.success("Hệ thống đang xử lý đơn hàng...");
       // Backend sẽ trả về checkoutUrl (Link Stripe hoặc Link Trang Success tùy theo paymentMethod)
       window.location.href = response.data.data.checkoutUrl;
@@ -117,7 +117,7 @@ export default function CheckoutPage() {
       <main className="flex-grow pt-10 pb-24">
         <div className="max-w-[1200px] mx-auto px-4 xl:px-0">
           <h1 className="text-3xl font-black text-slate-900 mb-8">Xác nhận Đặt phòng</h1>
-          
+
           <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-8">
             {/* Cột Trái: Điền Form */}
             <div className="lg:w-2/3 space-y-6">
@@ -126,11 +126,11 @@ export default function CheckoutPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-bold text-slate-700 mb-2">Check-in</label>
-                    <input type="date" required value={dates.checkIn} onChange={(e) => setDates({...dates, checkIn: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" />
+                    <input type="date" required value={dates.checkIn} onChange={(e) => setDates({ ...dates, checkIn: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-slate-700 mb-2">Check-out</label>
-                    <input type="date" required value={dates.checkOut} min={dates.checkIn} onChange={(e) => setDates({...dates, checkOut: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" />
+                    <input type="date" required value={dates.checkOut} min={dates.checkIn} onChange={(e) => setDates({ ...dates, checkOut: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" />
                   </div>
                 </div>
               </div>
@@ -140,19 +140,19 @@ export default function CheckoutPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
                   <div>
                     <label className="block text-sm font-bold text-slate-700 mb-2">Họ và tên người nhận phòng</label>
-                    <input type="text" required value={guestInfo.name} onChange={(e) => setGuestInfo({...guestInfo, name: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" placeholder="Nguyễn Văn A" />
+                    <input type="text" required value={guestInfo.name} onChange={(e) => setGuestInfo({ ...guestInfo, name: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" placeholder="Nguyễn Văn A" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-slate-700 mb-2">Số điện thoại liên hệ</label>
-                    <input type="text" required value={guestInfo.phone} onChange={(e) => setGuestInfo({...guestInfo, phone: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" placeholder="0901234567" />
+                    <input type="text" required value={guestInfo.phone} onChange={(e) => setGuestInfo({ ...guestInfo, phone: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" placeholder="0901234567" />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2">Số lượng khách</label>
                   <div className="flex items-center gap-4">
-                    <button type="button" onClick={() => setGuestInfo({...guestInfo, count: Math.max(1, guestInfo.count - 1)})} className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center font-bold text-xl hover:bg-slate-50 transition">-</button>
+                    <button type="button" onClick={() => setGuestInfo({ ...guestInfo, count: Math.max(1, guestInfo.count - 1) })} className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center font-bold text-xl hover:bg-slate-50 transition">-</button>
                     <span className="text-xl font-black w-8 text-center">{guestInfo.count}</span>
-                    <button type="button" onClick={() => setGuestInfo({...guestInfo, count: Math.min(room?.capacity || 10, guestInfo.count + 1)})} className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center font-bold text-xl hover:bg-slate-50 transition">+</button>
+                    <button type="button" onClick={() => setGuestInfo({ ...guestInfo, count: Math.min(room?.capacity || 10, guestInfo.count + 1) })} className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center font-bold text-xl hover:bg-slate-50 transition">+</button>
                     <span className="text-sm text-slate-500 font-medium ml-2">(Tối đa {room?.capacity} người)</span>
                   </div>
                 </div>
@@ -190,7 +190,7 @@ export default function CheckoutPage() {
                 <img src={room?.images[0]} alt="Phòng" className="w-full h-40 object-cover rounded-2xl mb-4" />
                 <h2 className="text-xl font-black text-slate-900 mb-1">{room?.name}</h2>
                 <p className="text-sm font-bold text-blue-600 bg-blue-50 inline-block px-2.5 py-1 rounded-lg mb-6">{room?.type}</p>
-                
+
                 <div className="space-y-3 pb-6 border-b border-slate-100 text-sm font-medium text-slate-600">
                   <div className="flex justify-between"><p>Giá phòng / đêm</p><p className="font-bold text-slate-900">{room?.pricePerNight.toLocaleString('vi-VN')} ₫</p></div>
                   <div className="flex justify-between"><p>Số đêm ở</p><p className="font-bold text-slate-900">{totalDays} đêm</p></div>

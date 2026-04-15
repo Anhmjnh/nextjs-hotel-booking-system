@@ -5,6 +5,6 @@ const router = Router();
 
 // Khai báo các API endpoints
 router.get('/', getOffers);
-router.post('/', createOffer); // Sẵn sàng cho lúc làm trang Admin
+router.post('/', createOffer); 
 
 export default router;

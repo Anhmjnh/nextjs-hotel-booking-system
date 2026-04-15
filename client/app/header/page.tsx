@@ -8,11 +8,6 @@ import Cookies from "js-cookie";
 // Component Logo
 const BrandLogo = () => (
   <div className="flex items-center gap-2">
-    <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/30">
-      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-      </svg>
-    </div>
     <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
       Booking
     </span>
@@ -43,7 +38,10 @@ export default function Header() {
     { name: "Liên hệ", href: "/contact" },
   ];
 
-  const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleNavigation = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
     if (pathname === href) {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -60,7 +58,11 @@ export default function Header() {
     <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-50 transition-all duration-300">
       <div className="max-w-[1400px] mx-auto px-8 xl:px-12">
         <div className="flex justify-between items-center h-24">
-          <Link href="/" onClick={(e) => handleNavigation(e, "/")} className="flex-shrink-0 outline-none">
+          <Link
+            href="/"
+            onClick={(e) => handleNavigation(e, "/")}
+            className="flex-shrink-0 outline-none"
+          >
             <BrandLogo />
           </Link>
 
@@ -72,15 +74,18 @@ export default function Header() {
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleNavigation(e, link.href)}
-                  className={`relative text-base font-bold tracking-wide transition-colors duration-300 outline-none py-2 group ${
-                    isActive ? "text-blue-600" : "text-slate-700 hover:text-blue-600"
-                  }`}
+                  className={`relative text-base font-bold tracking-wide transition-colors duration-300 outline-none py-2 group ${isActive
+                      ? "text-blue-600"
+                      : "text-slate-700 hover:text-blue-600"
+                    }`}
                 >
                   {link.name}
                   {isActive && (
                     <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-full"></span>
                   )}
-                  <span className={`absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 rounded-full transition-all duration-300 ${isActive ? "" : "group-hover:w-full"}`}></span>
+                  <span
+                    className={`absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 rounded-full transition-all duration-300 ${isActive ? "" : "group-hover:w-full"}`}
+                  ></span>
                 </Link>
               );
             })}
@@ -91,21 +96,43 @@ export default function Header() {
               <div className="w-32 h-12 bg-slate-100 animate-pulse rounded-full"></div>
             ) : isLoggedIn ? (
               <div className="flex items-center gap-4">
-                <Link href="/profile" className="flex items-center justify-center w-12 h-12 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-full transition-colors duration-300 font-bold shadow-sm">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                <Link
+                  href="/profile"
+                  className="flex items-center justify-center w-12 h-12 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-full transition-colors duration-300 font-bold shadow-sm"
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
                   </svg>
                 </Link>
-                <button onClick={handleLogout} className="px-6 py-3 bg-red-50 text-red-600 font-bold rounded-full hover:bg-red-600 hover:text-white transition duration-300 shadow-sm border border-red-100">
+                <button
+                  onClick={handleLogout}
+                  className="px-6 py-3 bg-red-50 text-red-600 font-bold rounded-full hover:bg-red-600 hover:text-white transition duration-300 shadow-sm border border-red-100"
+                >
                   Đăng xuất
                 </button>
               </div>
             ) : (
               <>
-                <Link href="/login" className="px-6 py-3 text-slate-700 font-bold hover:text-blue-600 transition">
+                <Link
+                  href="/login"
+                  className="px-6 py-3 text-slate-700 font-bold hover:text-blue-600 transition"
+                >
                   Đăng nhập
                 </Link>
-                <Link href="/register" className="px-6 py-3 bg-blue-600 text-white font-bold rounded-full hover:bg-blue-700 transition shadow-lg shadow-blue-600/20 active:scale-95">
+                <Link
+                  href="/register"
+                  className="px-6 py-3 bg-blue-600 text-white font-bold rounded-full hover:bg-blue-700 transition shadow-lg shadow-blue-600/20 active:scale-95"
+                >
                   Đăng ký
                 </Link>
               </>

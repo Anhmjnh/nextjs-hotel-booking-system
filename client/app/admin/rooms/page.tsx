@@ -22,7 +22,7 @@ interface Room {
 export default function AdminRoomsPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // State Phân trang
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
@@ -60,7 +60,7 @@ export default function AdminRoomsPage() {
 
   const handleDelete = async (id: number) => {
     if (!window.confirm("Bạn có chắc chắn muốn xóa phòng này? Mọi dữ liệu liên quan sẽ bị xóa vĩnh viễn!")) return;
-    
+
     try {
       const token = Cookies.get("admin_token");
       await api.delete(`/admin/rooms/${id}`, {
@@ -207,7 +207,7 @@ export default function AdminRoomsPage() {
             </tbody>
           </table>
         </div>
-        
+
         {/* Phân trang */}
         {totalPages > 1 && (
           <div className="px-8 py-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between">

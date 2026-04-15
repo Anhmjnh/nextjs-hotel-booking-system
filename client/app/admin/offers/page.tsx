@@ -152,8 +152,8 @@ export default function AdminOffersPage() {
     setFormData(defaultForm);
   };
 
-  const filteredOffers = offers.filter(o => 
-    o.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredOffers = offers.filter(o =>
+    o.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     o.code.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -174,10 +174,10 @@ export default function AdminOffersPage() {
 
       <div className="mb-8 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex gap-4">
         <div className="flex-1 relative">
-           <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-           </span>
-           <input type="text" placeholder="Tìm kiếm theo tiêu đề hoặc mã giảm giá..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 outline-none transition font-medium text-slate-700" />
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </span>
+          <input type="text" placeholder="Tìm kiếm theo tiêu đề hoặc mã giảm giá..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 outline-none transition font-medium text-slate-700" />
         </div>
       </div>
 
@@ -221,23 +221,23 @@ export default function AdminOffersPage() {
             <h2 className="text-2xl font-bold text-slate-900 mb-6">{editingOffer ? "Sửa ưu đãi" : "Tạo ưu đãi mới"}</h2>
             <form onSubmit={handleSave} className="space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div><label className="block text-sm font-bold text-slate-700 mb-2">Tiêu đề *</label><input type="text" required value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" /></div>
-                <div><label className="block text-sm font-bold text-slate-700 mb-2">Mã Code *</label><input type="text" required value={formData.code} onChange={(e) => setFormData({...formData, code: e.target.value.toUpperCase()})} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-bold font-mono" placeholder="VD: SUMMER2024" /></div>
-                
-                <div><label className="block text-sm font-bold text-slate-700 mb-2">Loại giảm giá *</label><select value={formData.discountType} onChange={(e) => setFormData({...formData, discountType: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium"><option value="PERCENTAGE">Theo phần trăm (%)</option><option value="FIXED">Số tiền cố định (VNĐ)</option></select></div>
-                <div><label className="block text-sm font-bold text-slate-700 mb-2">Mức giảm *</label><input type="number" required min={0} value={formData.discountValue} onChange={(e) => setFormData({...formData, discountValue: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" placeholder={formData.discountType === 'PERCENTAGE' ? "VD: 10" : "VD: 100000"} /></div>
-                
-                <div><label className="block text-sm font-bold text-slate-700 mb-2">Đơn tối thiểu (VNĐ)</label><input type="number" min={0} value={formData.minOrderValue} onChange={(e) => setFormData({...formData, minOrderValue: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" placeholder="Bỏ trống nếu không yêu cầu" /></div>
+                <div><label className="block text-sm font-bold text-slate-700 mb-2">Tiêu đề *</label><input type="text" required value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" /></div>
+                <div><label className="block text-sm font-bold text-slate-700 mb-2">Mã Code *</label><input type="text" required value={formData.code} onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-bold font-mono" placeholder="VD: SUMMER2024" /></div>
+
+                <div><label className="block text-sm font-bold text-slate-700 mb-2">Loại giảm giá *</label><select value={formData.discountType} onChange={(e) => setFormData({ ...formData, discountType: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium"><option value="PERCENTAGE">Theo phần trăm (%)</option><option value="FIXED">Số tiền cố định (VNĐ)</option></select></div>
+                <div><label className="block text-sm font-bold text-slate-700 mb-2">Mức giảm *</label><input type="number" required min={0} value={formData.discountValue} onChange={(e) => setFormData({ ...formData, discountValue: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" placeholder={formData.discountType === 'PERCENTAGE' ? "VD: 10" : "VD: 100000"} /></div>
+
+                <div><label className="block text-sm font-bold text-slate-700 mb-2">Đơn tối thiểu (VNĐ)</label><input type="number" min={0} value={formData.minOrderValue} onChange={(e) => setFormData({ ...formData, minOrderValue: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" placeholder="Bỏ trống nếu không yêu cầu" /></div>
                 {formData.discountType === 'PERCENTAGE' ? (
-                  <div><label className="block text-sm font-bold text-slate-700 mb-2">Giảm tối đa (VNĐ)</label><input type="number" min={0} value={formData.maxDiscount} onChange={(e) => setFormData({...formData, maxDiscount: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" placeholder="Bỏ trống nếu không giới hạn" /></div>
+                  <div><label className="block text-sm font-bold text-slate-700 mb-2">Giảm tối đa (VNĐ)</label><input type="number" min={0} value={formData.maxDiscount} onChange={(e) => setFormData({ ...formData, maxDiscount: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" placeholder="Bỏ trống nếu không giới hạn" /></div>
                 ) : <div></div>}
 
-                <div><label className="block text-sm font-bold text-slate-700 mb-2">Ngày bắt đầu *</label><input type="date" required value={formData.startDate} onChange={(e) => setFormData({...formData, startDate: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" /></div>
-                <div><label className="block text-sm font-bold text-slate-700 mb-2">Ngày kết thúc *</label><input type="date" required min={formData.startDate} value={formData.endDate} onChange={(e) => setFormData({...formData, endDate: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" /></div>
+                <div><label className="block text-sm font-bold text-slate-700 mb-2">Ngày bắt đầu *</label><input type="date" required value={formData.startDate} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" /></div>
+                <div><label className="block text-sm font-bold text-slate-700 mb-2">Ngày kết thúc *</label><input type="date" required min={formData.startDate} value={formData.endDate} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium" /></div>
 
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2">Màu chủ đạo</label>
-                  <select value={formData.color} onChange={(e) => setFormData({...formData, color: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium">
+                  <select value={formData.color} onChange={(e) => setFormData({ ...formData, color: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-blue-500 font-medium">
                     <option value="bg-blue-50 text-blue-700 border-blue-200">Xanh dương</option>
                     <option value="bg-red-50 text-red-700 border-red-200">Đỏ</option>
                     <option value="bg-green-50 text-green-700 border-green-200">Xanh lá</option>

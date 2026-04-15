@@ -146,6 +146,7 @@ export const getAdminUsers = async () => {
       phone: true,
       avatar: true,
       role: true,
+      isLocked: true,
       createdAt: true,
     },
     orderBy: { createdAt: 'desc' }
@@ -214,6 +215,30 @@ export const deleteUser = async (adminId: number, targetUserId: number) => {
 
   return await prisma.user.delete({
     where: { id: targetUserId }
+  });
+};
+
+export const toggleUserLock = async (adminId: number, targetUserId: number) => {
+  if (adminId === targetUserId) {
+    throw new Error('Không thể tự khóa tài khoản của chính mình!');
+  }
+
+  const targetUser = await prisma.user.findUnique({ where: { id: targetUserId } });
+  if (!targetUser) {
+    throw new Error('Không tìm thấy người dùng!');
+  }
+
+  // Luật Admin cuối cùng: Không cho khóa Admin cuối cùng còn hoạt động
+  if (targetUser.role === 'ADMIN' && targetUser.isLocked === false) {
+    const activeAdminCount = await prisma.user.count({ where: { role: 'ADMIN', isLocked: false } });
+    if (activeAdminCount <= 1) {
+      throw new Error('Không thể khóa Quản trị viên duy nhất của hệ thống!');
+    }
+  }
+
+  return await prisma.user.update({
+    where: { id: targetUserId },
+    data: { isLocked: !targetUser.isLocked },
   });
 };
 

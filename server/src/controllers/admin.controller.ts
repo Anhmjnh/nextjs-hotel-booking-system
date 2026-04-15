@@ -49,6 +49,18 @@ export const deleteOffer = async (req: any, res: Response, next: NextFunction) =
   }
 };
 
+export const toggleUserLock = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const adminId = req.user.userId;
+    const targetUserId = Number(req.params.id);
+    const user = await adminService.toggleUserLock(adminId, targetUserId);
+    const message = user.isLocked ? 'Khóa tài khoản thành công!' : 'Mở khóa tài khoản thành công!';
+    sendSuccess(res, user, message);
+  } catch (error: any) {
+    next(error);
+  }
+};
+
 export const getRooms = async (req: any, res: Response, next: NextFunction) => {
   try {
     const rooms = await adminService.getAdminRooms();

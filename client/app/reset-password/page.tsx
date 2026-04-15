@@ -11,7 +11,7 @@ function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-  
+
   const [formData, setFormData] = useState({ password: "", confirmPassword: "" });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -29,7 +29,7 @@ function ResetPasswordForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) return toast.error("Mật khẩu không khớp!");
-    
+
     setLoading(true);
     try {
       await api.post("/auth/reset-password", { token, newPassword: formData.password });

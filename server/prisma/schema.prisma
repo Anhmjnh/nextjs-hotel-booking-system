@@ -52,9 +52,11 @@ model User {
   phone     String?
   avatar    String?   // Trường lưu link ảnh đại diện
   role      Role      @default(USER)
+  isLocked  Boolean   @default(false) // Trạng thái tài khoản có bị khóa hay không
   
   bookings  Booking[] // Relationship: 1 User có nhiều Booking (Quản lý booking cá nhân)
   passwordResetTokens PasswordResetToken[] // Liên kết đến các token reset mật khẩu
+  reviews   Review[]  // Một user có thể viết nhiều review
   
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -72,7 +74,8 @@ model Room {
   location      String    @default("TP. Hồ Chí Minh") // Vị trí phòng (Thành phố/Khu vực)
   isAvailable   Boolean   @default(true) 
   
-  bookings      Booking[] 
+  bookings      Booking[]
+  reviews       Review[]  // Một phòng có nhiều review
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -152,6 +155,21 @@ model Contact {
   subject   String
   message   String   @db.Text
   isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int      // Điểm đánh giá (1-5 sao)
+  comment   String?  @db.Text
+  
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  roomId    Int
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
