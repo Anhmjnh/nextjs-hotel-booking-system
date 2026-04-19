@@ -153,6 +153,34 @@ export const getAdminUsers = async () => {
   });
 };
 
+export const createUser = async (adminId: number, data: any) => {
+  const { email, password, name, phone, role } = data;
+  const normalizedEmail = email.trim().toLowerCase();
+
+  // Kiểm tra xem Email đã tồn tại trong hệ thống chưa
+  const existingUser = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
+  });
+  if (existingUser) {
+    throw new Error('Email này đã được sử dụng trong hệ thống!');
+  }
+
+  // Mã hóa mật khẩu
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+  // Lưu thông tin User mới xuống DB
+  return await prisma.user.create({
+    data: { 
+      email: normalizedEmail, 
+      password: hashedPassword, 
+      name, 
+      phone,
+      role: role || 'USER'
+    },
+  });
+};
+
 export const updateUserRole = async (adminId: number, targetUserId: number, role: any) => {
   if (adminId === targetUserId) {
     throw new Error('Không thể tự thay đổi quyền của chính mình!');

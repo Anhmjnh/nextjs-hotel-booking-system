@@ -26,6 +26,11 @@ export default function AdminUsersPage() {
   const [editFormData, setEditFormData] = useState({ name: "", phone: "", password: "", oldPassword: "" });
   const [isSaving, setIsSaving] = useState(false);
 
+  // State Thêm người dùng
+  const [isAddingUser, setIsAddingUser] = useState(false);
+  const [addFormData, setAddFormData] = useState({ name: "", email: "", phone: "", password: "", role: "USER" });
+  const [isAdding, setIsAdding] = useState(false);
+
   // State Tìm kiếm
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
@@ -168,6 +173,42 @@ export default function AdminUsersPage() {
     }
   };
 
+  const handleAddUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!addFormData.email || !addFormData.name || !addFormData.password) {
+      return toast.error("Vui lòng điền đầy đủ các trường bắt buộc!");
+    }
+
+    if (addFormData.phone && !/^\d{10,11}$/.test(addFormData.phone)) {
+      return toast.error("Số điện thoại không hợp lệ (Phải là 10-11 chữ số)!");
+    }
+
+    if (addFormData.password.length < 6) {
+      return toast.error("Mật khẩu phải có ít nhất 6 ký tự!");
+    }
+
+    setIsAdding(true);
+    try {
+      const token = Cookies.get("admin_token");
+      await api.post(`/admin/users`, addFormData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success("Thêm người dùng thành công!");
+      setIsAddingUser(false);
+      setAddFormData({ name: "", email: "", phone: "", password: "", role: "USER" });
+      fetchUsers();
+    } catch (error) {
+      interface ApiError {
+        response?: { data?: { message?: string } };
+      }
+      const err = error as ApiError;
+      toast.error(err.response?.data?.message || "Thêm người dùng thất bại!");
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
   // Logic Lọc & Phân trang
   const filteredUsers = users.filter(u =>
     (roleFilter === "all" || u.role === roleFilter) &&
@@ -190,6 +231,10 @@ export default function AdminUsersPage() {
           <h1 className="text-3xl font-black text-slate-900 tracking-tight">Quản lý Người dùng</h1>
           <p className="text-slate-500 mt-2 font-medium">Xem danh sách, phân quyền và quản lý tài khoản trên hệ thống.</p>
         </div>
+        <button onClick={() => setIsAddingUser(true)} className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/30 flex items-center gap-2">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
+          Thêm người dùng
+        </button>
       </div>
 
       {/* Thanh công cụ Tìm kiếm & Bộ lọc */}
@@ -331,6 +376,46 @@ export default function AdminUsersPage() {
                 <button type="button" onClick={() => setEditingUser(null)} className="flex-1 px-4 py-3 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition">Hủy bỏ</button>
                 <button type="submit" disabled={isSaving} className="flex-1 px-4 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/30 disabled:opacity-50 flex justify-center items-center">
                   {isSaving ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> : "Lưu thay đổi"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Thêm người dùng */}
+      {isAddingUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm px-4">
+          <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Thêm người dùng mới</h2>
+            <form onSubmit={handleAddUser} className="space-y-5">
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-2">Họ và tên *</label>
+                <input type="text" required value={addFormData.name} onChange={(e) => setAddFormData({ ...addFormData, name: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition font-medium text-slate-700" placeholder="Nhập họ tên" />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-2">Email *</label>
+                <input type="email" required value={addFormData.email} onChange={(e) => setAddFormData({ ...addFormData, email: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition font-medium text-slate-700" placeholder="Nhập địa chỉ email" />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-2">Số điện thoại</label>
+                <input type="text" maxLength={11} value={addFormData.phone} onChange={(e) => setAddFormData({ ...addFormData, phone: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition font-medium text-slate-700" placeholder="VD: 0901234567" />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-2">Mật khẩu *</label>
+                <input type="password" required value={addFormData.password} onChange={(e) => setAddFormData({ ...addFormData, password: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition font-medium text-slate-700" placeholder="Nhập mật khẩu (Ít nhất 6 ký tự)" />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-2">Vai trò *</label>
+                <select value={addFormData.role} onChange={(e) => setAddFormData({ ...addFormData, role: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition font-medium text-slate-700 bg-white">
+                  <option value="USER">USER</option>
+                  <option value="ADMIN">ADMIN</option>
+                </select>
+              </div>
+              <div className="pt-4 flex gap-3">
+                <button type="button" onClick={() => setIsAddingUser(false)} className="flex-1 px-4 py-3 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition">Hủy bỏ</button>
+                <button type="submit" disabled={isAdding} className="flex-1 px-4 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/30 disabled:opacity-50 flex justify-center items-center">
+                  {isAdding ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> : "Thêm mới"}
                 </button>
               </div>
             </form>

@@ -3,6 +3,7 @@ import * as adminService from '../services/admin.service';
 import * as offerService from '../services/offer.service';
 import { sendSuccess } from '../utils/response';
 
+
 export const getDashboardStats = async (req: any, res: Response, next: NextFunction) => {
   try {
     const stats = await adminService.getDashboardStats();
@@ -131,6 +132,15 @@ export const getUsers = async (req: any, res: Response, next: NextFunction) => {
     sendSuccess(res, users, 'Lấy danh sách người dùng thành công!');
   } catch (error: any) {
     next(error);
+  }
+};
+export const createUser = async (req: any, res: Response) => {
+  try {
+    const adminId = req.user.userId;
+    const user = await adminService.createUser(adminId, req.body);
+    res.status(201).json({ message: "Thêm người dùng thành công!", data: user });
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
   }
 };
 
