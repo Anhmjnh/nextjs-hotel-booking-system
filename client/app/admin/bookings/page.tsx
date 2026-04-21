@@ -37,7 +37,7 @@ interface Booking {
 export default function AdminBookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // State Tìm kiếm
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -75,8 +75,8 @@ export default function AdminBookingsPage() {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success("Cập nhật trạng thái thành công!");
-      
-      // Tải lại danh sách để lấy thông tin Hóa đơn (Payment) mới nhất từ DB
+
+      // Tải lại danh sách để lấy thông tin Hóa đơn  mới nhất từ DB
       fetchBookings();
     } catch (error) {
       interface ApiError {
@@ -90,12 +90,12 @@ export default function AdminBookingsPage() {
   // Logic Lọc & Phân trang
   const filteredBookings = bookings.filter(b => {
     const matchSearch = b.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        (b.guestName && b.guestName.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                        b.room.name.toLowerCase().includes(searchTerm.toLowerCase());
+      (b.guestName && b.guestName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      b.room.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchStatus = statusFilter === "all" || b.status === statusFilter;
     return matchSearch && matchStatus;
   });
-  
+
   const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
   const currentBookings = filteredBookings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
@@ -115,10 +115,10 @@ export default function AdminBookingsPage() {
       {/* Thanh công cụ Tìm kiếm & Bộ lọc */}
       <div className="mb-8 flex flex-col md:flex-row gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
         <div className="flex-1 relative">
-           <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-           </span>
-           <input type="text" placeholder="Tìm tên khách hàng hoặc tên phòng..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition font-medium text-slate-700" />
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </span>
+          <input type="text" placeholder="Tìm tên khách hàng hoặc tên phòng..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition font-medium text-slate-700" />
         </div>
         <div className="w-full md:w-64">
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 outline-none font-medium text-slate-700 bg-white">
@@ -187,15 +187,15 @@ export default function AdminBookingsPage() {
                       )}
                     </td>
                     <td className="px-8 py-5 whitespace-nowrap">
-                      <select 
-                        value={b.status} 
+                      <select
+                        value={b.status}
                         onChange={(e) => handleUpdateStatus(b.id, e.target.value)}
                         disabled={b.status === 'COMPLETED' || b.status === 'CANCELLED'}
                         className={`text-xs font-bold px-3 py-2 rounded-xl outline-none border-2 transition-colors
-                          ${b.status === 'CONFIRMED' ? 'bg-blue-50 text-blue-700 border-blue-200 focus:border-blue-500' : 
-                            b.status === 'COMPLETED' ? 'bg-green-50 text-green-700 border-green-200 focus:border-green-500' : 
-                            b.status === 'PENDING' ? 'bg-orange-50 text-orange-700 border-orange-200 focus:border-orange-500 cursor-pointer' : 
-                            'bg-red-50 text-red-700 border-red-200'}
+                          ${b.status === 'CONFIRMED' ? 'bg-blue-50 text-blue-700 border-blue-200 focus:border-blue-500' :
+                            b.status === 'COMPLETED' ? 'bg-green-50 text-green-700 border-green-200 focus:border-green-500' :
+                              b.status === 'PENDING' ? 'bg-orange-50 text-orange-700 border-orange-200 focus:border-orange-500 cursor-pointer' :
+                                'bg-red-50 text-red-700 border-red-200'}
                           ${(b.status === 'COMPLETED' || b.status === 'CANCELLED') ? 'opacity-70 cursor-not-allowed' : ''}`}
                       >
                         <option value="PENDING">Chờ thanh toán</option>

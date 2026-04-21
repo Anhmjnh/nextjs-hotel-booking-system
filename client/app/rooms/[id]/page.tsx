@@ -48,7 +48,7 @@ export default function RoomDetailPage() {
   const [myComment, setMyComment] = useState("");
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
-  // State cho "Xem thêm" và "Sửa/Xóa"
+ 
   const [visibleReviews, setVisibleReviews] = useState(6);
   const [editingReviewId, setEditingReviewId] = useState<number | null>(null);
   const [editingData, setEditingData] = useState({ rating: 0, comment: "" });
@@ -218,15 +218,14 @@ export default function RoomDetailPage() {
           </div>
         </div>
 
-        {/* Lưới ảnh được fix lại bằng Grid: Fit ảnh, có ngăn cách rõ ràng */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 rounded-[20px] overflow-hidden mb-12 h-[350px] md:h-[460px]">
-          {/* Cột trái: Ảnh chính */}
+          {/* : Ảnh chính */}
           <div className="relative h-full w-full group cursor-pointer bg-slate-100">
             <img src={mainImage} alt="Main cover" className="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500 ease-in-out" />
             <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
           </div>
 
-          {/* Cột phải: 4 ảnh phụ được chia bằng sub-grid */}
+          {/*  4 ảnh phụ */}
           <div className="hidden md:grid grid-cols-2 grid-rows-2 gap-2 h-full w-full">
             {smallImages.map((img, idx) => (
               <div key={idx} className="relative h-full w-full group cursor-pointer bg-slate-50 overflow-hidden">
@@ -243,13 +242,13 @@ export default function RoomDetailPage() {
           </div>
         </div>
 
-        {/* Bố cục 2 cột - Đã thêm items-start để fix lỗi sticky bị trôi */}
+       
         <div className="flex flex-col lg:flex-row gap-12 relative items-start">
 
-          {/* Cột trái: Thông tin chi tiết */}
+          {/*  Thông tin chi tiết */}
           <div className="flex-1 space-y-10">
 
-            {/* Giới thiệu host */}
+            {/* Giới thiệu  */}
             <div className="flex justify-between items-start border-b border-slate-200 pb-8">
               <div>
                 <h2 className="text-[22px] font-bold text-slate-900 mb-2">Toàn bộ phòng {room.type.toLowerCase()} </h2>
@@ -297,7 +296,7 @@ export default function RoomDetailPage() {
             </div>
           </div>
 
-          {/* Cột phải: Box Đặt phòng Sticky */}
+         
           <div className="w-full lg:w-[360px] flex-shrink-0">
             <div className="bg-white p-6 rounded-3xl shadow-[0_6px_24px_rgba(0,0,0,0.08)] border border-slate-100 sticky top-28">
               <div className="flex items-end gap-1 mb-6">
@@ -320,7 +319,7 @@ export default function RoomDetailPage() {
           </div>
         </div>
 
-        {/* --- KHU VỰC ĐÁNH GIÁ (FULL-WIDTH) --- */}
+        {/*  KHU VỰC ĐÁNH GIÁ*/}
         <div className="mt-16 pt-12 border-t border-slate-200">
           <div className="flex items-center gap-3 mb-10">
             <svg className="w-7 h-7 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
-// Component Logo đồng bộ với Header
+
 const BrandLogo = () => (
     <div className="flex items-center gap-2 justify-center">
         <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">

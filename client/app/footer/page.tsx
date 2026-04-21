@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="bg-white border-t border-slate-200">
       <div className="max-w-[1400px] mx-auto px-8 xl:px-12 pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          {/* Cột 1: Thông tin thương hiệu */}
+          {/*  */}
           <div className="space-y-6">
             <Link href="/" className="flex items-center gap-2 outline-none w-fit">
            
@@ -24,7 +24,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Cột 2: Khám phá */}
+          {/*  Khám phá */}
           <div>
             <h3 className="text-lg font-bold text-slate-900 mb-6">Khám phá</h3>
             <ul className="space-y-4">
@@ -35,7 +35,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Cột 3: Hỗ trợ */}
+          {/*  Hỗ trợ */}
           <div>
             <h3 className="text-lg font-bold text-slate-900 mb-6">Hỗ trợ khách hàng</h3>
             <ul className="space-y-4">
@@ -46,7 +46,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Cột 4: Liên hệ */}
+          {/*  Liên hệ */}
           <div>
             <h3 className="text-lg font-bold text-slate-900 mb-6">Thông tin liên hệ</h3>
             <ul className="space-y-4 mb-6">
@@ -72,12 +72,12 @@ export default function Footer() {
              © {new Date().getFullYear()} Booking. All rights reserved.
           </p>
           
-          <div className="hidden md:block"></div> {/* Box rỗng giữ chỗ bên trái trên Desktop để đẩy logo sang phải */}
+          <div className="hidden md:block"></div> {/* */}
           
           <div className="flex gap-4 items-center justify-center z-10">
 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" className="h-6 transition-transform duration-300 hover:scale-110 cursor-pointer" />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png" alt="PayPal" className="h-5 transition-transform duration-300 hover:scale-110 cursor-pointer" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="Mastercard" className="h-6 transition-transform duration-300 hover:scale-110 cursor-pointer" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-5 transition-transform duration-300 hover:scale-110 cursor-pointer" />
           </div>
         </div>
       </div>

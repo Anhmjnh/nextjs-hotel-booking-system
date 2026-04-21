@@ -3,7 +3,7 @@ import prisma from '../config/prisma';
 export const createBooking = async (userId: string | number, data: any) => {
   const { roomId, checkInDate, checkOutDate, specialRequest, paymentMethod, offerCode, guestName, guestPhone, guestCount } = data;
 
-  // 1. Chuyển đổi chuỗi ngày tháng sang định dạng Date
+  //  Chuyển đổi chuỗi ngày tháng sang định dạng Date
   const checkIn = new Date(checkInDate);
   const checkOut = new Date(checkOutDate);
 
@@ -11,7 +11,7 @@ export const createBooking = async (userId: string | number, data: any) => {
     throw new Error('Ngày check-out phải sau ngày check-in!');
   }
 
-  // 2. Kiểm tra xem phòng có tồn tại không
+  //  Kiểm tra xem phòng có tồn tại không
   const room = await prisma.room.findUnique({ where: { id: Number(roomId) } });
   if (!room) {
     throw new Error('Không tìm thấy phòng!');
@@ -21,11 +21,11 @@ export const createBooking = async (userId: string | number, data: any) => {
     throw new Error(`Phòng này chỉ chứa tối đa ${room.capacity} người!`);
   }
 
-  // 3. Logic quan trọng: Kiểm tra xem phòng đã bị đặt trùng ngày chưa
+  //   Kiểm tra xem phòng đã bị đặt trùng ngày chưa
   const overlappingBookings = await prisma.booking.findFirst({
     where: {
       roomId: Number(roomId),
-      status: { not: 'CANCELLED' }, // Bỏ qua các đơn đã bị hủy
+      status: { not: 'CANCELLED' }, 
       AND: [
         { checkInDate: { lt: checkOut } },
         { checkOutDate: { gt: checkIn } }
@@ -37,7 +37,7 @@ export const createBooking = async (userId: string | number, data: any) => {
     throw new Error('Phòng đã được đặt trong khoảng thời gian này. Vui lòng chọn ngày khác!');
   }
 
-  // 4. Tính toán số ngày ở và tổng tiền
+  //  Tính toán số ngày ở và tổng tiền
   const diffTime = Math.abs(checkOut.getTime() - checkIn.getTime());
   const totalDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   let totalPrice = totalDays * room.pricePerNight;
@@ -45,7 +45,7 @@ export const createBooking = async (userId: string | number, data: any) => {
   let appliedCode = null;
   let discountAmount = 0;
 
-  // 4.1. Xử lý mã giảm giá
+  //  Xử lý mã giảm giá
   if (offerCode) {
     const offer = await prisma.offer.findUnique({ where: { code: offerCode } });
     if (!offer) throw new Error('Mã giảm giá không tồn tại!');
@@ -66,13 +66,13 @@ export const createBooking = async (userId: string | number, data: any) => {
     appliedCode = offer.code;
   }
 
-  // 4.2. Chọn hình thức thanh toán
+  // Chọn hình thức thanh toán
   const method = paymentMethod === 'CASH' ? 'CASH' : 'ONLINE';
 
-  // 5. Lưu Booking mới xuống Database
+  // Lưu Booking mới xuống Database
   return await prisma.booking.create({
     data: { userId: Number(userId), roomId: Number(roomId), checkInDate: checkIn, checkOutDate: checkOut, totalDays, totalPrice, specialRequest, paymentMethod: method, appliedCode, discountAmount, guestName, guestPhone, guestCount: Number(guestCount) || 1 },
-    include: { user: true, room: true } // Lấy kèm thông tin để gửi Email
+    include: { user: true, room: true } 
   });
 };
 
@@ -82,7 +82,7 @@ export const getUserBookings = async (userId: string | number) => {
     where: { userId: Number(userId) },
     include: {
       room: { select: { name: true, images: true } },
-      payment: true // Kéo thêm dữ liệu thanh toán cho user
+      payment: true 
     },
     orderBy: { createdAt: 'desc' }
   });

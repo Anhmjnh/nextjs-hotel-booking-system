@@ -12,7 +12,7 @@ router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password', authController.resetPassword);
 
 
-// Đường dẫn cần bảo vệ (Phải có Token mới vào được)
+// Đường dẫn cần bảo vệ bằng token
 router.get('/me', verifyToken, authController.getMe);
 router.put('/me', verifyToken, authController.updateMe);
 router.put('/change-password', verifyToken, authController.changePassword);

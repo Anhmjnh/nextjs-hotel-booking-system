@@ -35,7 +35,7 @@ export default function CheckoutPage() {
   const [appliedPromo, setAppliedPromo] = useState<{ code: string, discount: number } | null>(null);
 
   useEffect(() => {
-    // Tự động lấy Date từ localStorage (Nếu trước đó khách đã chọn trên trang chi tiết)
+    // Tự động lấy Date từ localStorage 
     const savedDates = localStorage.getItem("booking_dates");
     if (savedDates) setDates(JSON.parse(savedDates));
 
@@ -100,7 +100,7 @@ export default function CheckoutPage() {
       });
 
       toast.success("Hệ thống đang xử lý đơn hàng...");
-      // Backend sẽ trả về checkoutUrl (Link Stripe hoặc Link Trang Success tùy theo paymentMethod)
+      // Backend sẽ trả về checkoutUrl 
       window.location.href = response.data.data.checkoutUrl;
     } catch (error) {
       const errorMessage = axios.isAxiosError(error) ? error.response?.data?.message || "Đặt phòng thất bại!" : "Đặt phòng thất bại!";
@@ -118,8 +118,10 @@ export default function CheckoutPage() {
         <div className="max-w-[1200px] mx-auto px-4 xl:px-0">
           <h1 className="text-3xl font-black text-slate-900 mb-8">Xác nhận Đặt phòng</h1>
 
-          <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-8">
-            {/* Cột Trái: Điền Form */}
+          {/*  */}
+          <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-8 items-start">
+            
+            {/*  Điền Form */}
             <div className="lg:w-2/3 space-y-6">
               <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
                 <h2 className="text-xl font-bold text-slate-900 mb-5">1. Lịch trình của bạn</h2>
@@ -184,9 +186,9 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {/* Cột Phải: Tổng quan và Tính tiền */}
-            <div className="lg:w-1/3">
-              <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 sticky top-24">
+            {/* : Tổng quan và Tính tiền  */}
+            <div className="lg:w-1/3 sticky top-28 z-10">
+              <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
                 <img src={room?.images[0]} alt="Phòng" className="w-full h-40 object-cover rounded-2xl mb-4" />
                 <h2 className="text-xl font-black text-slate-900 mb-1">{room?.name}</h2>
                 <p className="text-sm font-bold text-blue-600 bg-blue-50 inline-block px-2.5 py-1 rounded-lg mb-6">{room?.type}</p>

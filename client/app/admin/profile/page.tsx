@@ -160,7 +160,7 @@ export default function AdminProfilePage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Cột Trái: Thông tin cá nhân */}
+        {/*  Thông tin cá nhân */}
         <div className="lg:col-span-2 bg-white rounded-3xl p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-10 pb-10 border-b border-slate-100">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
@@ -223,7 +223,7 @@ export default function AdminProfilePage() {
           </div>
         </div>
 
-        {/* Cột Phải: Menu điều hướng */}
+        {/*  Menu điều hướng */}
         <div className="space-y-6">
           <div className="bg-white rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
             <div className="w-14 h-14 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center mb-6">

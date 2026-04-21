@@ -56,7 +56,7 @@ export default function ContactPage() {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
-            {/* CỘT TRÁI: Thông tin liên hệ */}
+            {/*  Thông tin liên hệ */}
             <div className="w-full lg:w-5/12 space-y-8">
               <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex items-start gap-6 hover:shadow-md transition">
                 <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0">
@@ -92,7 +92,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* CỘT PHẢI: Form liên hệ */}
+            {/*  Form liên hệ */}
             <div className="w-full lg:w-7/12">
               <div className="bg-white p-8 md:p-12 rounded-3xl shadow-lg shadow-slate-200/40 border border-slate-100">
                 <h2 className="text-2xl font-bold text-slate-900 mb-8">Gửi lời nhắn cho chúng tôi</h2>

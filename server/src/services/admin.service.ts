@@ -2,34 +2,34 @@ import prisma from '../config/prisma';
 import bcrypt from 'bcrypt';
 
 export const getDashboardStats = async () => {
-  // 1. Đếm số lượng
+  // . Đếm số lượng
   const totalUsers = await prisma.user.count({ where: { role: 'USER' } });
   const totalRooms = await prisma.room.count();
   const totalBookings = await prisma.booking.count();
 
-  // 2. Tính tổng doanh thu (Tính cả đơn Đã Xác nhận và Đã Hoàn thành)
+  // . Tính tổng doanh thu (Tính cả đơn Đã Xác nhận và Đã Hoàn thành)
   const confirmedBookings = await prisma.booking.findMany({
     where: { status: { in: ['CONFIRMED', 'COMPLETED'] } },
     select: { totalPrice: true, createdAt: true }
   });
   const totalRevenue = confirmedBookings.reduce((sum, booking) => sum + booking.totalPrice, 0);
 
-  // 3. Tính toán dữ liệu Biểu đồ doanh thu theo từng tháng của năm hiện tại
+  // . Tính toán dữ liệu Biểu đồ doanh thu theo từng tháng của năm hiện tại
   const currentYear = new Date().getFullYear();
   const monthlyRevenue = Array.from({ length: 12 }, (_, i) => ({
     month: `T${i + 1}`,
     revenue: 0,
-    value: 0, // Phần trăm chiều cao cột trên biểu đồ
-    amount: "0đ" // Định dạng chữ hiển thị (VD: 15M, 500K)
+    value: 0, 
+    amount: "0đ" 
   }));
 
   let maxRevenue = 0;
 
-  // Cộng dồn doanh thu vào đúng tháng
+ 
   confirmedBookings.forEach(booking => {
     const date = new Date(booking.createdAt);
     if (date.getFullYear() === currentYear) {
-      const monthIndex = date.getMonth(); // Lấy ra tháng (0 - 11)
+      const monthIndex = date.getMonth(); 
       monthlyRevenue[monthIndex].revenue += booking.totalPrice;
       if (monthlyRevenue[monthIndex].revenue > maxRevenue) {
         maxRevenue = monthlyRevenue[monthIndex].revenue;
@@ -37,7 +37,7 @@ export const getDashboardStats = async () => {
     }
   });
 
-  // Quy đổi ra phần trăm cột và định dạng số tiền cho đẹp
+  
   monthlyRevenue.forEach(item => {
     item.value = maxRevenue > 0 ? Math.round((item.revenue / maxRevenue) * 100) : 0;
     if (item.revenue >= 1000000) {
@@ -88,13 +88,13 @@ export const updateRoom = async (roomId: number, data: any) => {
   });
 };
 
-// --- QUẢN LÝ ĐƠN ĐẶT PHÒNG (ADMIN) ---
+// --- QUẢN LÝ ĐƠN ĐẶT PHÒNG  ---
 export const getAdminBookings = async () => {
   return await prisma.booking.findMany({
     include: {
       user: { select: { name: true, email: true, phone: true } },
       room: { select: { name: true } },
-      payment: true // Kéo thêm dữ liệu thanh toán
+      payment: true // 
     },
     orderBy: { createdAt: 'desc' }
   });
@@ -111,7 +111,7 @@ export const updateBookingStatus = async (bookingId: number, status: any) => {
     throw new Error('Đơn đã Hoàn thành hoặc Đã hủy thì không thể thay đổi trạng thái nữa!');
   }
 
-  // Logic thanh toán: Nếu đơn Tiền mặt được Xác nhận hoặc Hoàn thành -> Tự động ghi nhận đã thu tiền
+  
   if (booking.paymentMethod === 'CASH' && (status === 'CONFIRMED' || status === 'COMPLETED')) {
     if (!booking.payment) {
       await prisma.payment.create({
@@ -136,7 +136,7 @@ export const updateBookingStatus = async (bookingId: number, status: any) => {
   });
 };
 
-// --- QUẢN LÝ NGƯỜI DÙNG (ADMIN) ---
+// --- QUẢN LÝ NGƯỜI DÙNG  ---
 export const getAdminUsers = async () => {
   return await prisma.user.findMany({
     select: {
@@ -186,7 +186,7 @@ export const updateUserRole = async (adminId: number, targetUserId: number, role
     throw new Error('Không thể tự thay đổi quyền của chính mình!');
   }
 
-  // Luật Admin cuối cùng: Nếu đang giáng chức 1 Admin xuống USER
+  
   if (role === 'USER') {
     const targetUser = await prisma.user.findUnique({ where: { id: targetUserId } });
     if (targetUser?.role === 'ADMIN') {
@@ -207,9 +207,9 @@ export const updateUserInfo = async (adminId: number, targetUserId: number, data
   const targetUser = await prisma.user.findUnique({ where: { id: targetUserId } });
   if (!targetUser) throw new Error("Không tìm thấy người dùng!");
 
-  // Nếu Admin có nhập mật khẩu mới, tiến hành băm (hash) mật khẩu đó
+  
   if (data.password && data.password.trim() !== '') {
-    // Bảo mật: Nếu đổi mật khẩu của Admin, bắt buộc phải xác thực mật khẩu cũ
+    
     if (targetUser.role === 'ADMIN') {
       if (!data.oldPassword) throw new Error("Yêu cầu nhập mật khẩu cũ để đổi mật khẩu Quản trị viên!");
       
@@ -234,7 +234,7 @@ export const deleteUser = async (adminId: number, targetUserId: number) => {
     throw new Error('Không thể tự xóa tài khoản của chính mình!');
   }
 
-  // Luật Admin cuối cùng
+  
   const targetUser = await prisma.user.findUnique({ where: { id: targetUserId } });
   if (targetUser?.role === 'ADMIN') {
     const adminCount = await prisma.user.count({ where: { role: 'ADMIN' } });
@@ -256,7 +256,7 @@ export const toggleUserLock = async (adminId: number, targetUserId: number) => {
     throw new Error('Không tìm thấy người dùng!');
   }
 
-  // Luật Admin cuối cùng: Không cho khóa Admin cuối cùng còn hoạt động
+  
   if (targetUser.role === 'ADMIN' && targetUser.isLocked === false) {
     const activeAdminCount = await prisma.user.count({ where: { role: 'ADMIN', isLocked: false } });
     if (activeAdminCount <= 1) {
@@ -270,7 +270,7 @@ export const toggleUserLock = async (adminId: number, targetUserId: number) => {
   });
 };
 
-// --- QUẢN LÝ LIÊN HỆ (ADMIN) ---
+// --- QUẢN LÝ LIÊN HỆ  ---
 export const getAdminContacts = async () => {
   return await prisma.contact.findMany({
     orderBy: { createdAt: 'desc' }

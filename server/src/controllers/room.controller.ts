@@ -32,7 +32,7 @@ export const getTopChoiceRooms = async (req: Request, res: Response, next: NextF
 
 export const createReview = async (req: any, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user.userId; // Lấy từ token
+    const userId = req.user.userId; 
     const roomId = Number(req.params.id);
     const review = await roomService.createReview(userId, roomId, req.body);
     sendSuccess(res, review, 'Gửi đánh giá thành công!', 201);
@@ -54,7 +54,7 @@ export const updateReview = async (req: any, res: Response, next: NextFunction) 
 
 export const deleteReview = async (req: any, res: Response, next: NextFunction) => {
   try {
-    const user = req.user; // Chứa userId và role
+    const user = req.user; 
     const { reviewId } = req.params;
     await roomService.deleteReview(user, Number(reviewId));
     sendSuccess(res, null, 'Xóa đánh giá thành công!');

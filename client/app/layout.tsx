@@ -15,7 +15,7 @@ export default function RootLayout({
     <html lang="vi">
       <body>
         {children}
-        {/* Nhúng bộ hiển thị thông báo góc trên bên phải cho toàn bộ App */}
+       
         <Toaster position="top-right" />
       </body>
     </html>

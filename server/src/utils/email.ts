@@ -44,7 +44,7 @@ export const sendContactEmailToAdmin = async (contact: any) => {
 
   await transporter.sendMail({
     from: `"Booking Hotel" <${process.env.EMAIL_USER}>`,
-    to: process.env.EMAIL_USER, // Gửi thẳng về email của Admin (chính bạn)
+    to: process.env.EMAIL_USER, 
     subject: `[Liên hệ mới] ${contact.subject}`,
     html: `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">

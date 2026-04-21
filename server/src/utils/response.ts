@@ -1,4 +1,4 @@
-// Các hàm tiện ích chuẩn hóa định dạng trả về cho Frontend
+
 import { Response } from 'express';
 
 export const sendSuccess = (res: Response, data: any, message = 'Success', statusCode = 200) => {

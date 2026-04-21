@@ -16,7 +16,7 @@ export interface Room {
 }
 
 export default function RoomCard({ room }: { room: Room }) {
-  // Lấy ảnh đầu tiên trong mảng images làm ảnh đại diện, nếu mảng rỗng thì dùng ảnh mặc định
+  
   const coverImage = room.images && room.images.length > 0
     ? room.images[0]
     : "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop";

@@ -13,14 +13,14 @@ export interface OfferPayload {
   color?: string;
 }
 
-// Lấy tất cả ưu đãi (mới nhất lên đầu)
+// Lấy tất cả ưu đãi 
 export const getAllOffers = async () => {
   return await prisma.offer.findMany({
     orderBy: { createdAt: 'desc' }
   });
 };
 
-// Tạo ưu đãi mới (Dành cho trang Admin sau này)
+// Tạo ưu đãi mới 
 export const createOffer = async (data: OfferPayload) => {
   return await prisma.offer.create({
     data: {

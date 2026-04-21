@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
-import api from "../../api"; 
+import api from "../../api";
 import axios from "axios";
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 
@@ -31,17 +31,17 @@ function LoginContent() {
 
       toast.success("Đăng nhập thành công!");
 
-      // Chuyển hướng tùy theo Role (Quyền hạn)
+      // Chuyển hướng tùy theo Role 
       setTimeout(() => {
         if (user.role === "ADMIN") {
-          Cookies.set("admin_token", token); 
-          Cookies.set("token", token);       
+          Cookies.set("admin_token", token);
+          Cookies.set("token", token);
           window.location.href = "/admin";
         } else {
           Cookies.set("token", token);
           window.location.href = "/";
         }
-      }, 500); 
+      }, 500);
     } catch (error) {
       const errorMessage = axios.isAxiosError(error)
         ? error.response?.data?.message || "Đăng nhập thất bại!"
@@ -61,7 +61,7 @@ function LoginContent() {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
         });
 
-        // 2. Gửi thông tin về Backend của chúng ta
+        // 2. Gửi thông tin về Backend 
         const response = await api.post("/auth/google", {
           email: userInfo.data.email,
           name: userInfo.data.name,

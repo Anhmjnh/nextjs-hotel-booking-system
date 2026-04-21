@@ -25,12 +25,12 @@ function HotelsContent() {
 
   // State dành cho Phân trang
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12; // 12 là con số hoàn hảo cho grid 1-2-3-4
+  const itemsPerPage = 12;
 
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        // Đẩy Query Params xuống Backend để thực hiện lọc (Đặc biệt là lọc ngày chống trùng lịch)
+
         const response = await api.get('/rooms', {
           params: { location: queryLocation, checkIn: queryCheckIn, checkOut: queryCheckOut, capacity: queryGuests }
         });
@@ -48,12 +48,12 @@ function HotelsContent() {
     fetchRooms();
   }, [queryLocation, queryCheckIn, queryCheckOut, queryGuests]);
 
-  // Reset về trang 1 mỗi khi người dùng thay đổi Bộ lọc hoặc Tìm kiếm
+
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, sortBy, capacityFilter]);
 
-  // Logic lọc phụ (Tên phòng, Sắp xếp giá) ở phía Frontend
+
   const filteredRooms = rooms
     .filter((room) => room.name.toLowerCase().includes(searchTerm.toLowerCase()) || (room.location && room.location.toLowerCase().includes(searchTerm.toLowerCase())))
     .filter((room) => capacityFilter === "all" ? true : room.capacity >= parseInt(capacityFilter))
@@ -63,13 +63,13 @@ function HotelsContent() {
       return 0; // Mặc định
     });
 
-  // Logic Phân trang (Cắt mảng dữ liệu theo trang hiện tại)
+
   const totalPages = Math.ceil(filteredRooms.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentRooms = filteredRooms.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Hàm chuyển trang và tự động cuộn lên đầu mượt mà
+
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -77,10 +77,10 @@ function HotelsContent() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
-      {/* Kế thừa lại Header */}
+      {/*  Header */}
       <Header />
 
-      {/* Phần nội dung chính (Main Content) */}
+      {/* Phần nội dung chính  */}
       <main className="flex-grow pt-16 pb-24">
         <div className="max-w-[1400px] mx-auto px-8 xl:px-12">
           <div className="mb-14 text-center max-w-3xl mx-auto">
@@ -119,7 +119,7 @@ function HotelsContent() {
           </div>
 
           {loading ? (
-            /* Skeleton Loading xịn sò thay cho Spinner */
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((skeleton) => (
                 <div key={skeleton} className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden animate-pulse">
@@ -136,7 +136,7 @@ function HotelsContent() {
               ))}
             </div>
           ) : error ? (
-            /* Trạng thái Lỗi hiển thị rõ ràng để tránh hiểu nhầm */
+            /*  */
             <div className="text-center py-24 bg-red-50/50 rounded-3xl shadow-sm border border-red-100">
               <p className="text-2xl font-bold text-red-600 mb-3">Đã xảy ra sự cố! 😥</p>
               <p className="text-red-500 font-medium mb-6">{error}</p>
@@ -150,7 +150,7 @@ function HotelsContent() {
             </div>
           ) : filteredRooms.length > 0 ? (
             <>
-              {/* Hiển thị danh sách phòng ĐÃ ĐƯỢC CẮT THEO TRANG */}
+              {/* Hiển thị danh sách phòng  */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {currentRooms.map((room) => (
                   <RoomCard key={room.id} room={room} />
@@ -195,7 +195,7 @@ function HotelsContent() {
         </div>
       </main>
 
-      {/* Kế thừa lại Footer */}
+      {/*  Footer */}
       <Footer />
     </div>
   );

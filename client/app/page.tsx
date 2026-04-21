@@ -44,16 +44,16 @@ export default function HomePage() {
   }, []);
 
   const handleSearch = () => {
-    // Lưu ngày vào bộ nhớ tạm để trang Checkout tự động lấy ra dùng
+    // Lưu ngày vào bộ nhớ tạm để trang Checkout tự động lấy ra 
     if (searchData.checkIn && searchData.checkOut) {
       localStorage.setItem("booking_dates", JSON.stringify({ checkIn: searchData.checkIn, checkOut: searchData.checkOut }));
     }
 
-    // Chuyển hướng và truyền dữ liệu lên thanh URL (URL Syncing)
+    // Chuyển hướng và truyền dữ liệu lên thanh URL 
     router.push(`/hotels?location=${searchData.location}&checkIn=${searchData.checkIn}&checkOut=${searchData.checkOut}&guests=${searchData.guests}`);
   };
 
-  // Mock data Điểm đến thịnh hành
+  //  Điểm đến thịnh hành
   const destinations = [
     { name: "Đà Lạt", properties: "120+ chỗ nghỉ", image: "https://images.unsplash.com/photo-1558338475-7ac335028946?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
     { name: "Vũng Tàu", properties: "150+ chỗ nghỉ", image: "https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=80&w=800&auto=format&fit=crop" },
@@ -63,12 +63,12 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Gọi Component Header vào đây */}
+    
       <Header />
 
-      {/* --- PHẦN BANNER CHÍNH (HERO SECTION) --- */}
+      {/*  PHẦN BANNER CHÍNH   */}
       <section className="relative bg-gray-900 text-white py-32 px-8 text-center flex flex-col items-center justify-center">
-        {/* Ảnh nền tối giản, sang trọng */}
+        
         <img src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?q=80&w=2070&auto=format&fit=crop" alt="Luxury hotel pool" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
 
@@ -80,7 +80,7 @@ export default function HomePage() {
             Khám phá hàng ngàn không gian lưu trú sang trọng với mức giá tốt nhất cùng trải nghiệm đặt phòng mượt mà.
           </p>
 
-          {/* Thanh tìm kiếm Floating Island */}
+          {/* Thanh tìm kiếm  */}
           <div className="bg-white p-3 rounded-[2rem] shadow-2xl flex flex-col lg:flex-row items-center w-full max-w-5xl mx-auto text-gray-800 backdrop-blur-xl gap-2 relative z-20">
 
             {/* Vị trí */}
@@ -101,7 +101,7 @@ export default function HomePage() {
                   className="w-full bg-transparent outline-none font-bold text-gray-900 placeholder-gray-400"
                 />
 
-                {/* Giao diện Dropdown Tùy chỉnh Cao cấp */}
+                {/* Giao diện Dropdown  */}
                 {showLocationDropdown && (
                   <div className="absolute top-[120%] left-0 w-full md:w-[120%] bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden z-50 py-4 px-2">
                     <p className="text-xs font-bold text-gray-400 px-4 mb-2 uppercase tracking-wider">Địa điểm phổ biến</p>
@@ -163,7 +163,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- ĐIỂM ĐẾN THỊNH HÀNH --- */}
+      {/*  ĐIỂM ĐẾN THỊNH HÀNH  */}
       <section className="max-w-[1400px] mx-auto px-8 xl:px-12 py-20">
         <div className="mb-10">
           <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">Điểm đến thịnh hành</h2>
@@ -183,7 +183,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- DANH SÁCH PHÒNG NỔI BẬT --- */}
+      {/*  DANH SÁCH PHÒNG NỔI BẬT  */}
       <section className="bg-white py-20 border-t border-gray-100">
         <div className="max-w-[1400px] mx-auto px-8 xl:px-12">
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
@@ -221,7 +221,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- PROMO BANNER --- */}
+      {/*  PROMO BANNER  */}
       <section className="max-w-[1400px] mx-auto px-8 xl:px-12 py-10">
         <div className="rounded-3xl p-10 md:p-14 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl shadow-blue-900/20 relative overflow-hidden">
           <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=2070&auto=format&fit=crop" alt="Promo banner" className="absolute inset-0 w-full h-full object-cover" />
@@ -236,7 +236,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- VÌ SAO CHỌN CHÚNG TÔI --- */}
+      {/*  VÌ SAO CHỌN CHÚNG TÔI  */}
       <section className="bg-slate-50 py-20 border-t border-slate-200/60">
         <div className="max-w-[1400px] mx-auto px-8 xl:px-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -259,7 +259,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Gọi Component Footer vào đây */}
+      
       <Footer />
     </div>
   );

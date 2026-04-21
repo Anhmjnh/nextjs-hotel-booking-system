@@ -71,7 +71,7 @@ export default function UserDashboard() {
       );
       toast.success("Đã hủy đơn đặt phòng thành công!");
 
-      // Cập nhật lại state để giao diện thay đổi sang màu đỏ ngay lập tức
+     
       setBookings((prev) =>
         prev.map((b) =>
           b.id === bookingId ? { ...b, status: "CANCELLED" } : b,

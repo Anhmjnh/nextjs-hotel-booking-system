@@ -58,7 +58,7 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-     {/* Card 1: Doanh thu */}
+     {/*  Doanh thu */}
    <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex items-center gap-5 hover:-translate-y-1 transition-transform duration-300">
      <div className="w-16 h-16 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center flex-shrink-0">
       
@@ -77,7 +77,7 @@ export default function AdminDashboardPage() {
      </div>
    </div>
 
-        {/* Card 2: Đơn đặt */}
+        {/* Đơn đặt */}
         <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex items-center gap-5 hover:-translate-y-1 transition-transform duration-300">
           <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0">
             <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-2V2h-2v2H9V2H7v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-7 12h-4v-2h4v2zm4-4H8v-2h8v2z"/></svg>
@@ -88,7 +88,7 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Card 3: Số phòng */}
+        {/* Số phòng */}
         <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex items-center gap-5 hover:-translate-y-1 transition-transform duration-300">
           <div className="w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0">
             <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M19 7h-8v8H3V4H1v17h2v-3h18v3h2v-12a2 2 0 0 0-2-2zm-10 6V9h2v4h-2zm4 0V9h2v4h-2zm4 0V9h2v4h-2z"/></svg>
@@ -99,7 +99,7 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Card 4: Người dùng */}
+        {/* Người dùng */}
         <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex items-center gap-5 hover:-translate-y-1 transition-transform duration-300">
           <div className="w-16 h-16 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center flex-shrink-0">
             <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
@@ -111,7 +111,7 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* Biểu đồ doanh thu giả lập  */}
+      {/* Biểu đồ doanh thu  */}
       <div className="mt-10 bg-white p-8 md:p-10 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
         <div className="flex justify-between items-center mb-10">
           <div>
@@ -130,7 +130,7 @@ export default function AdminDashboardPage() {
               <div className="relative w-full flex items-end justify-center rounded-t-lg h-full">
                 <div 
                   className={`w-full transition-colors duration-300 rounded-t-xl relative cursor-pointer ${item.value > 0 ? "bg-blue-200 group-hover:bg-blue-500" : "bg-slate-100"}`}
-                  style={{ height: `${Math.max(item.value, 2)}%` }} // Đảm bảo cột luôn hiện ít nhất 2% dù doanh thu = 0
+                  style={{ height: `${Math.max(item.value, 2)}%` }} 
                 >
                   <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs font-bold py-1.5 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
                     {item.amount}

@@ -212,7 +212,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Cột Trái: Thông tin cá nhân */}
+            {/*  Thông tin cá nhân */}
             <div className="lg:col-span-2 bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-slate-100">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-10 pb-10 border-b border-slate-100">
                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
@@ -330,7 +330,7 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* Cột Phải: Menu điều hướng */}
+            {/*  Menu điều hướng */}
             <div className="space-y-6">
               {/* Nút sang Lịch sử đặt phòng */}
               <Link

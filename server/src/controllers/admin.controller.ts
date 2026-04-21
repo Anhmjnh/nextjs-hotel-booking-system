@@ -13,7 +13,7 @@ export const getDashboardStats = async (req: any, res: Response, next: NextFunct
   }
 };
 
-// --- QUẢN LÝ ƯU ĐÃI (OFFERS) ---
+// --- QUẢN LÝ ƯU ĐÃI  ---
 export const getOffers = async (req: any, res: Response, next: NextFunction) => {
   try {
     const offers = await offerService.getAllOffers();

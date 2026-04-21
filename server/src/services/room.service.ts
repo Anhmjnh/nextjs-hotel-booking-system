@@ -4,17 +4,17 @@ export const getAllRooms = async (queryParams?: any) => {
   const { location, capacity, checkIn, checkOut } = queryParams || {};
   let whereClause: any = { isAvailable: true };
 
-  // 1. Lọc theo vị trí
+  //  Lọc theo vị trí
   if (location && location !== 'all') {
     whereClause.location = { contains: String(location), mode: 'insensitive' };
   }
 
-  // 2. Lọc theo sức chứa
+  //  Lọc theo sức chứa
   if (capacity && capacity !== 'all') {
     whereClause.capacity = { gte: Number(capacity) };
   }
 
-  // 3. LOGIC : CHỐNG TRÙNG LỊCH KHI TÌM KIẾM
+  
   if (checkIn && checkOut) {
     const inDate = new Date(String(checkIn));
     const outDate = new Date(String(checkOut));
@@ -22,7 +22,7 @@ export const getAllRooms = async (queryParams?: any) => {
     
     whereClause.bookings = {
       none: {
-        status: { not: 'CANCELLED' }, // Bỏ qua đơn đã hủy
+        status: { not: 'CANCELLED' }, 
         AND: [
           { checkInDate: { lt: outDate } },
           { checkOutDate: { gt: inDate } }
@@ -98,7 +98,7 @@ export const createReview = async (userId: number, roomId: number, data: { ratin
     throw new Error('Điểm đánh giá phải từ 1 đến 5.');
   }
 
-  //  User chỉ được review phòng họ đã ở
+  
   const validBooking = await prisma.booking.findFirst({
     where: {
       userId: userId,
@@ -111,7 +111,7 @@ export const createReview = async (userId: number, roomId: number, data: { ratin
     throw new Error('Bạn chỉ có thể đánh giá phòng sau khi đã hoàn thành chuyến đi.');
   }
 
-  // Luôn tạo đánh giá mới thay vì ghi đè (upsert)
+  
   return await prisma.review.create({
     data: { rating, comment, userId, roomId }
   });
@@ -144,7 +144,7 @@ export const deleteReview = async (user: { userId: number, role: string }, revie
     throw new Error('Không tìm thấy đánh giá!');
   }
 
-  // Cho phép xóa nếu user là chủ sở hữu HOẶC user là ADMIN
+  
   if (review.userId !== user.userId && user.role !== 'ADMIN') {
     throw new Error('Bạn không có quyền xóa đánh giá này!');
   }

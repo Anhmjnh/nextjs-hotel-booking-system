@@ -87,7 +87,7 @@ export default function OffersPage() {
           </div>
 
           {loading ? (
-            /* Skeleton Loading xịn sò thay thế */
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {[1, 2, 3, 4].map((skeleton) => (
                 <div
@@ -108,7 +108,7 @@ export default function OffersPage() {
               ))}
             </div>
           ) : error ? (
-            /* Trạng thái lỗi nếu Backend chưa có API này */
+            /* Trạng thái lỗi nếu Backend chưa có API  */
             <div className="text-center py-24 bg-red-50/50 rounded-3xl shadow-sm border border-red-100">
               <p className="text-2xl font-bold text-red-600 mb-3">
                 Đã xảy ra sự cố!{" "}
@@ -133,7 +133,7 @@ export default function OffersPage() {
               </p>
             </div>
           ) : (
-            /* Lưới danh sách Ưu đãi thật từ DB */
+            /* Lưới danh sách Ưu đãi từ DB */
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {offers.map((offer) => (
                 <div

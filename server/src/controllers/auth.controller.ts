@@ -7,7 +7,7 @@ import { AuthRequest } from '../middlewares/auth.middleware';
 export const googleLogin = async (req: any, res: any, next: any) => {
   try {
     const result = await authService.googleLogin(req.body);
-    // Hàm sendSuccess nếu bạn dùng, hoặc tự trả res.json
+    
     res.status(200).json({ success: true, data: result, message: 'Đăng nhập Google thành công!' });
   } catch (error) {
     next(error);
@@ -16,16 +16,16 @@ export const googleLogin = async (req: any, res: any, next: any) => {
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Nhận dữ liệu từ Frontend gửi lên (req.body)
+    // Nhận dữ liệu từ Frontend gửi lên 
     const userData = req.body;
 
-    // Gọi Service xử lý logic (Mã hóa, lưu DB)
+    // Gọi Service xử lý logic 
     const newUser = await authService.registerUser(userData);
 
     // Trả về kết quả thành công cho Frontend
     sendSuccess(res, newUser, 'Đăng ký tài khoản thành công!', 201);
   } catch (error: any) {
-    // Nếu có lỗi (ví dụ trùng email), gán mã lỗi 400 (Bad Request)
+    // Nếu có lỗi , gán mã lỗi 400 
     error.statusCode = 400;
     next(error); 
   }
@@ -39,14 +39,14 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
     sendSuccess(res, result, 'Đăng nhập thành công!');
   } catch (error: any) {
-    error.statusCode = 401; // 401: Unauthorized (Không được phép)
+    error.statusCode = 401; 
     next(error);
   }
 };
 
 export const getMe = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    // Nhờ middleware verifyToken, ta đã biết được userId của người đang gọi API
+    
     const userId = req.user.userId;
 
     const user = await authService.getUserById(userId);

@@ -8,7 +8,6 @@ import adminRoutes from './admin.routes';
 
 const router = Router();
 
-// Gom nhóm tất cả route của ứng dụng
 router.use('/auth', authRoutes);
 router.use('/rooms', roomRoutes);
 router.use('/bookings', bookingRoutes);

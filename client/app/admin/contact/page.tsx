@@ -217,7 +217,7 @@ export default function AdminContactsPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 text-center px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/30">
-                Trả lời qua Web Gmail
+                Trả lời qua  Gmail
               </a>
               <button onClick={() => handleDelete(selectedContact.id)} className="px-6 py-3 bg-red-50 text-red-600 font-bold rounded-xl hover:bg-red-100 transition">
                 Xóa tin nhắn

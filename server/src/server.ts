@@ -2,7 +2,7 @@
 import app from './app';
 import dotenv from 'dotenv';
 
-// Load các biến môi trường từ file .env
+
 dotenv.config();
 
 const PORT: number | string = process.env.PORT || 5000;

@@ -25,7 +25,7 @@ export default function AddEditRoomPage() {
     pricePerNight: 0,
     capacity: 1,
     description: "",
-    amenities: "", // Chuỗi cách nhau bằng dấu phẩy
+    amenities: "",
     isAvailable: true,
     images: [] as string[],
   });
@@ -86,7 +86,7 @@ export default function AddEditRoomPage() {
         uploadData.append("file", file);
         uploadData.append("upload_preset", "booking_hotel");
 
-        // Sử dụng chung Cloudinary với Avatar
+
         const res = await fetch("https://api.cloudinary.com/v1_1/dp42o9sek/image/upload", {
           method: "POST",
           body: uploadData,
@@ -220,7 +220,7 @@ export default function AddEditRoomPage() {
           <textarea name="description" rows={4} required value={formData.description} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition resize-none" placeholder="Nhập giới thiệu về phòng..."></textarea>
         </div>
 
-        {/* Quản lý Hình ảnh (Cloudinary) */}
+        {/* Cloudinary */}
         <div>
           <label className="block text-sm font-bold text-slate-700 mb-2">Hình ảnh phòng (Có thể chọn nhiều ảnh)</label>
           <div className="flex flex-wrap gap-4 mb-4">

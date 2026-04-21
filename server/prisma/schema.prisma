@@ -23,10 +23,10 @@ enum RoomType {
 }
 
 enum BookingStatus {
-  PENDING     // Vừa đặt, chờ thanh toán
-  CONFIRMED   // Đã thanh toán hoặc chốt đặt
-  CANCELLED   // Đã hủy (bởi User hoặc Admin, hoặc do quá hạn thanh toán)
-  COMPLETED   // Đã check-out và hoàn thành
+  PENDING     
+  CONFIRMED   
+  CANCELLED   
+  COMPLETED   
 }
 
 enum PaymentStatus {
@@ -46,17 +46,17 @@ enum PaymentMethod {
 model User {
   id        Int       @id @default(autoincrement())
   email     String    @unique
-  password  String?   // Bỏ bắt buộc vì Đăng nhập Google không có pass
+  password  String?   
   googleId  String?   @unique // Lưu ID của Google
   name      String
   phone     String?
-  avatar    String?   // Trường lưu link ảnh đại diện
+  avatar    String?   
   role      Role      @default(USER)
-  isLocked  Boolean   @default(false) // Trạng thái tài khoản có bị khóa hay không
+  isLocked  Boolean   @default(false) 
   
-  bookings  Booking[] // Relationship: 1 User có nhiều Booking (Quản lý booking cá nhân)
-  passwordResetTokens PasswordResetToken[] // Liên kết đến các token reset mật khẩu
-  reviews   Review[]  // Một user có thể viết nhiều review
+  bookings  Booking[] 
+  passwordResetTokens PasswordResetToken[] 
+  reviews   Review[]  
   
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -67,15 +67,15 @@ model Room {
   name          String
   description   String    @db.Text
   pricePerNight Float
-  capacity      Int       // Số người tối đa
+  capacity      Int       
   type          RoomType
-  amenities     String[]  // Mảng tiện ích (Wifi, Tivi, Điều hòa...)
-  images        String[]  // Mảng URL ảnh của phòng
-  location      String    @default("TP. Hồ Chí Minh") // Vị trí phòng (Thành phố/Khu vực)
+  amenities     String[] 
+  images        String[]  
+  location      String    @default("TP. Hồ Chí Minh") 
   isAvailable   Boolean   @default(true) 
   
   bookings      Booking[]
-  reviews       Review[]  // Một phòng có nhiều review
+  reviews       Review[] 
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -91,19 +91,19 @@ model Booking {
   totalDays      Int
   totalPrice     Float
   status         BookingStatus @default(PENDING)
-  paymentMethod  PaymentMethod @default(ONLINE) // Hình thức TT
-  appliedCode    String?       // Mã giảm giá đã áp dụng
-  discountAmount Float         @default(0)      // Số tiền được giảm
+  paymentMethod  PaymentMethod @default(ONLINE) 
+  appliedCode    String?     
+  discountAmount Float         @default(0)      
 
-  guestName      String?       // Tên người nhận phòng
-  guestPhone     String?       // Số điện thoại người nhận phòng
-  guestCount     Int           @default(1)      // Số lượng người đi
+  guestName      String?      
+  guestPhone     String?       
+  guestCount     Int           @default(1)      
 
   specialRequest String?       @db.Text
 
   user           User          @relation(fields: [userId], references: [id])
   room           Room          @relation(fields: [roomId], references: [id])
-  payment        Payment?      // 1 Booking có 1 Payment (One-to-One)
+  payment        Payment?      
 
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
@@ -126,10 +126,10 @@ model Offer {
   id            Int      @id @default(autoincrement())
   title         String
   code          String   @unique
-  discountType  String   // 'PERCENTAGE' (Phần trăm) hoặc 'FIXED' (Tiền mặt)
+  discountType  String   
   discountValue Float
-  minOrderValue Float?   // Tùy chọn: Giá trị đơn tối thiểu để áp dụng
-  maxDiscount   Float?   // Tùy chọn: Mức giảm tối đa (nếu chọn giảm theo %)
+  minOrderValue Float?   
+  maxDiscount   Float?   
   startDate     DateTime
   endDate       DateTime
   image         String
@@ -161,7 +161,7 @@ model Contact {
 
 model Review {
   id        Int      @id @default(autoincrement())
-  rating    Int      // Điểm đánh giá (1-5 sao)
+  rating    Int      
   comment   String?  @db.Text
   
   userId    Int

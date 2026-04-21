@@ -33,8 +33,10 @@ Tác giả: Anh Minh
 
 ---
 
-### 2.2. Quản trị viên
-
+### 2.2. Quản trị viên 
+  Tài khoản ADMIN:
+  Email:minhkendy1902@gmail.com
+  Pass:123456
 * Dashboard thống kê người dùng, phòng, đơn đặt và doanh thu
 * Quản lý phòng (thêm, sửa, xóa, cập nhật hình ảnh)
 * Quản lý đơn đặt phòng (cập nhật trạng thái: Pending, Confirmed, Completed, Cancelled)

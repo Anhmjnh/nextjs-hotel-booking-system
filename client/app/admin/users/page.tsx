@@ -38,7 +38,7 @@ export default function AdminUsersPage() {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    // Giải mã nhanh token để lấy ID của chính Admin đang thao tác
+  
     const token = Cookies.get("admin_token");
     if (token) {
       try {
